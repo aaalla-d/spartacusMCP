@@ -1,0 +1,125 @@
+<!--
+  SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
+  SPDX-License-Identifier: Apache-2.0
+-->
+
+<div class="midnight-theme-container">
+  <!-- Theme Header -->
+  <header class="theme-header">
+    <h1 class="theme-title">{{ 'midnighttheme.title' | cxTranslate }}</h1>
+    <p class="theme-description">{{ 'midnighttheme.description' | cxTranslate }}</p>
+  </header>
+
+  <!-- Theme Controls -->
+  <div class="theme-controls">
+    <button 
+      class="btn btn-primary theme-toggle"
+      (click)="toggleTheme()"
+      [attr.aria-label]="'midnighttheme.toggleTheme' | cxTranslate">
+      <i class="fas fa-moon" aria-hidden="true"></i>
+      {{ 'midnighttheme.toggleTheme' | cxTranslate }}
+    </button>
+    
+    <button 
+      class="btn btn-secondary theme-reset"
+      (click)="resetTheme()"
+      [attr.aria-label]="'midnighttheme.resetTheme' | cxTranslate">
+      <i class="fas fa-undo" aria-hidden="true"></i>
+      {{ 'midnighttheme.resetTheme' | cxTranslate }}
+    </button>
+  </div>
+
+  <!-- Theme Preview -->
+  <div class="theme-preview">
+    <div class="preview-section">
+      <h2>{{ 'midnighttheme.preview.navigation' | cxTranslate }}</h2>
+      <nav class="preview-nav">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Products</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Categories</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="preview-section">
+      <h2>{{ 'midnighttheme.preview.buttons' | cxTranslate }}</h2>
+      <div class="button-group">
+        <button class="btn btn-primary">Primary Button</button>
+        <button class="btn btn-secondary">Secondary Button</button>
+        <button class="btn btn-accent">Accent Button</button>
+        <button class="btn btn-outline">Outline Button</button>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h2>{{ 'midnighttheme.preview.cards' | cxTranslate }}</h2>
+      <div class="card-grid">
+        <div class="preview-card">
+          <div class="card-header">
+            <h3>Product Card</h3>
+          </div>
+          <div class="card-body">
+            <p>This is a sample product card with the midnight theme applied.</p>
+            <div class="card-price">$99.99</div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-accent btn-sm">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="preview-card">
+          <div class="card-header">
+            <h3>Feature Card</h3>
+          </div>
+          <div class="card-body">
+            <p>Another example card showing the theme's styling capabilities.</p>
+            <div class="card-badge">New</div>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-primary btn-sm">Learn More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-section">
+      <h2>{{ 'midnighttheme.preview.forms' | cxTranslate }}</h2>
+      <form class="preview-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" class="form-control" rows="3" placeholder="Your message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-accent">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Theme Color Palette -->
+  <div class="color-palette">
+    <h2>{{ 'midnighttheme.colorPalette' | cxTranslate }}</h2>
+    <div class="color-swatches">
+      <div class="color-swatch primary" [style.background-color]="themeConfig.primaryColor">
+        <span class="color-label">Primary</span>
+        <span class="color-value">{{ themeConfig.primaryColor }}</span>
+      </div>
+      <div class="color-swatch secondary" [style.background-color]="themeConfig.secondaryColor">
+        <span class="color-label">Secondary</span>
+        <span class="color-value">{{ themeConfig.secondaryColor }}</span>
+      </div>
+      <div class="color-swatch accent" [style.background-color]="themeConfig.accentColor">
+        <span class="color-label">Accent</span>
+        <span class="color-value">{{ themeConfig.accentColor }}</span>
+      </div>
+      <div class="color-swatch background" [style.background-color]="themeConfig.backgroundColor">
+        <span class="color-label">Background</span>
+        <span class="color-value">{{ themeConfig.backgroundColor }}</span>
+      </div>
+    </div>
+  </div>
+</div> 
