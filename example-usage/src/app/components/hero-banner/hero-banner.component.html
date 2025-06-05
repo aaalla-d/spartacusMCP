@@ -1,0 +1,101 @@
+<!--
+  SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
+  SPDX-License-Identifier: Apache-2.0
+-->
+
+<section 
+  class="cx-hero-banner"
+  [class.cx-hero-banner--responsive]="responsive"
+  [style.background-image]="backgroundImageStyle"
+  [attr.aria-label]="title"
+  role="banner">
+  
+  <!-- Background overlay for better text readability -->
+  <div class="cx-hero-banner__overlay" *ngIf="backgroundImage"></div>
+  
+  <!-- Hero content container -->
+  <div class="cx-hero-banner__content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+          
+          <!-- Main title -->
+          <h1 
+            class="cx-hero-banner__title"
+            [class.cx-hero-banner__title--animated]="animated"
+            *ngIf="title">
+            {{ title }}
+          </h1>
+          
+          <!-- Subtitle -->
+          <p 
+            class="cx-hero-banner__subtitle"
+            [class.cx-hero-banner__subtitle--animated]="animated"
+            *ngIf="subtitle">
+            {{ subtitle }}
+          </p>
+          
+          <!-- Description -->
+          <div 
+            class="cx-hero-banner__description"
+            [class.cx-hero-banner__description--animated]="animated"
+            *ngIf="description"
+            [innerHTML]="description">
+          </div>
+          
+          <!-- Call-to-action buttons -->
+          <div class="cx-hero-banner__actions" *ngIf="ctaText || secondaryCtaText">
+            
+            <!-- Primary CTA -->
+            <button 
+              type="button"
+              class="btn btn-primary cx-hero-banner__cta"
+              [class.cx-hero-banner__cta--animated]="animated"
+              (click)="onCtaClick()"
+              [attr.aria-label]="ctaText + ' - ' + title"
+              *ngIf="ctaText">
+              {{ ctaText }}
+              <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </button>
+            
+            <!-- Secondary CTA -->
+            <button 
+              type="button"
+              class="btn btn-outline-light cx-hero-banner__cta-secondary"
+              [class.cx-hero-banner__cta-secondary--animated]="animated"
+              (click)="onSecondaryCtaClick()"
+              [attr.aria-label]="secondaryCtaText + ' - ' + title"
+              *ngIf="secondaryCtaText">
+              {{ secondaryCtaText }}
+            </button>
+            
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Loading state -->
+  <div 
+    class="cx-hero-banner__loading" 
+    *ngIf="(loading$ | async)"
+    role="status" 
+    aria-live="polite">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Mobile-specific content -->
+  <div class="cx-hero-banner__mobile-content d-md-none" *ngIf="mobileContent">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div [innerHTML]="mobileContent"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</section> 

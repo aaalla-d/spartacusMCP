@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙 Midnight Black Theme - Spartacus MCP Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Theme Variables */
+        :root {
+            /* Core Colors */
+            --cx-color-primary: #000000;
+            --cx-color-secondary: #1a1a1a;
+            --cx-color-background: #0d0d0d;
+            --cx-color-text: #ffffff;
+            --cx-color-accent: #ff6b35;
+            --cx-color-border: #333333;
+            --cx-color-shadow: rgba(255, 255, 255, 0.1);
+            
+            /* Extended Colors */
+            --cx-color-inverse: #ffffff;
+            --cx-color-success: #28a745;
+            --cx-color-warning: #ffc107;
+            --cx-color-danger: #dc3545;
+            --cx-color-info: #17a2b8;
+            
+            /* Grays */
+            --cx-color-gray-100: #f8f9fa;
+            --cx-color-gray-200: #e9ecef;
+            --cx-color-gray-300: #dee2e6;
+            --cx-color-gray-400: #ced4da;
+            --cx-color-gray-500: #adb5bd;
+            --cx-color-gray-600: #6c757d;
+            --cx-color-gray-700: #495057;
+            --cx-color-gray-800: #343a40;
+            --cx-color-gray-900: #212529;
+            
+            /* Spacing */
+            --cx-spacing-1: 0.25rem;
+            --cx-spacing-2: 0.5rem;
+            --cx-spacing-3: 0.75rem;
+            --cx-spacing-4: 1rem;
+            --cx-spacing-5: 1.25rem;
+            --cx-spacing-6: 1.5rem;
+            --cx-spacing-8: 2rem;
+            --cx-spacing-10: 2.5rem;
+            --cx-spacing-12: 3rem;
+            
+            /* Border Radius */
+            --cx-border-radius: 0.375rem;
+            --cx-border-radius-sm: 0.25rem;
+            --cx-border-radius-lg: 0.5rem;
+            --cx-border-radius-xl: 0.75rem;
+            --cx-border-radius-full: 9999px;
+            
+            /* Shadows */
+            --cx-box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.075);
+            --cx-box-shadow-sm: 0 0.0625rem 0.125rem rgba(255, 255, 255, 0.05);
+            --cx-box-shadow-lg: 0 0.5rem 1rem rgba(255, 255, 255, 0.15);
+            --cx-box-shadow-xl: 0 1.25rem 1.5rem rgba(255, 255, 255, 0.1);
+            --cx-box-shadow-hover: 0 0.25rem 0.5rem rgba(255, 255, 255, 0.1);
+            
+            /* Transitions */
+            --cx-transition: all 0.3s ease;
+            --cx-transition-fast: all 0.15s ease;
+            --cx-transition-slow: all 0.5s ease;
+            
+            /* Typography */
+            --cx-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --cx-font-size-xs: 0.75rem;
+            --cx-font-size-sm: 0.875rem;
+            --cx-font-size-base: 1rem;
+            --cx-font-size-lg: 1.125rem;
+            --cx-font-size-xl: 1.25rem;
+            --cx-font-size-2xl: 1.5rem;
+            --cx-font-size-3xl: 1.875rem;
+            --cx-font-size-4xl: 2.25rem;
+        }
+
+        /* Global Theme Styles */
+        body {
+            background-color: var(--cx-color-background);
+            color: var(--cx-color-text);
+            font-family: var(--cx-font-family);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        ::selection {
+            background-color: var(--cx-color-accent);
+            color: var(--cx-color-background);
+        }
+
+        ::-moz-selection {
+            background-color: var(--cx-color-accent);
+            color: var(--cx-color-background);
+        }
+
+        /* Component Styles */
+        .midnight-theme-container {
+            min-height: 100vh;
+            padding: var(--cx-spacing-6);
+            background: linear-gradient(135deg, var(--cx-color-background) 0%, var(--cx-color-secondary) 100%);
+        }
+
+        /* Theme Header */
+        .theme-header {
+            text-align: center;
+            margin-bottom: var(--cx-spacing-8);
+            padding: var(--cx-spacing-6);
+            border-bottom: 1px solid var(--cx-color-border);
+        }
+
+        .theme-title {
+            font-size: var(--cx-font-size-4xl);
+            font-weight: 700;
+            margin-bottom: var(--cx-spacing-4);
+            background: linear-gradient(45deg, var(--cx-color-text), var(--cx-color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-description {
+            font-size: var(--cx-font-size-lg);
+            color: var(--cx-color-gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Theme Controls */
+        .theme-controls {
+            display: flex;
+            justify-content: center;
+            gap: var(--cx-spacing-4);
+            margin-bottom: var(--cx-spacing-8);
+        }
+
+        .theme-toggle,
+        .theme-reset {
+            display: flex;
+            align-items: center;
+            gap: var(--cx-spacing-2);
+            transition: var(--cx-transition);
+        }
+
+        .theme-toggle:hover,
+        .theme-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--cx-box-shadow-hover);
+        }
+
+        .theme-toggle i,
+        .theme-reset i {
+            font-size: var(--cx-font-size-sm);
+        }
+
+        /* Theme Preview */
+        .theme-preview {
+            display: grid;
+            gap: var(--cx-spacing-8);
+            margin-bottom: var(--cx-spacing-8);
+        }
+
+        .preview-section {
+            background: var(--cx-color-secondary);
+            border: 1px solid var(--cx-color-border);
+            border-radius: var(--cx-border-radius-lg);
+            padding: var(--cx-spacing-6);
+            box-shadow: var(--cx-box-shadow);
+            transition: var(--cx-transition);
+        }
+
+        .preview-section:hover {
+            box-shadow: var(--cx-box-shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .preview-section h2 {
+            font-size: var(--cx-font-size-2xl);
+            font-weight: 600;
+            margin-bottom: var(--cx-spacing-4);
+            color: var(--cx-color-accent);
+        }
+
+        /* Navigation Preview */
+        .nav-list {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: var(--cx-spacing-4);
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: block;
+            padding: var(--cx-spacing-3) var(--cx-spacing-4);
+            color: var(--cx-color-text);
+            text-decoration: none;
+            border-radius: var(--cx-border-radius);
+            transition: var(--cx-transition);
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            background-color: var(--cx-color-accent);
+            color: var(--cx-color-background);
+            border-color: var(--cx-color-accent);
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            gap: var(--cx-spacing-3);
+            flex-wrap: wrap;
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--cx-spacing-6);
+        }
+
+        .preview-card {
+            background: var(--cx-color-primary);
+            border: 1px solid var(--cx-color-border);
+            border-radius: var(--cx-border-radius-lg);
+            overflow: hidden;
+            transition: var(--cx-transition);
+        }
+
+        .preview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--cx-box-shadow-xl);
+            border-color: var(--cx-color-accent);
+        }
+
+        .card-header {
+            padding: var(--cx-spacing-4);
+            border-bottom: 1px solid var(--cx-color-border);
+            background: var(--cx-color-secondary);
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: var(--cx-font-size-lg);
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: var(--cx-spacing-4);
+            position: relative;
+        }
+
+        .card-body p {
+            margin-bottom: var(--cx-spacing-3);
+            color: var(--cx-color-gray-300);
+        }
+
+        .card-price {
+            font-size: var(--cx-font-size-xl);
+            font-weight: 700;
+            color: var(--cx-color-accent);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: var(--cx-spacing-2);
+            right: var(--cx-spacing-2);
+            background: var(--cx-color-accent);
+            color: var(--cx-color-background);
+            padding: var(--cx-spacing-1) var(--cx-spacing-2);
+            border-radius: var(--cx-border-radius-full);
+            font-size: var(--cx-font-size-xs);
+            font-weight: 600;
+        }
+
+        .card-footer {
+            padding: var(--cx-spacing-4);
+            border-top: 1px solid var(--cx-color-border);
+            background: var(--cx-color-secondary);
+        }
+
+        /* Form Preview */
+        .preview-form {
+            max-width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: var(--cx-spacing-4);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--cx-spacing-2);
+            font-weight: 500;
+            color: var(--cx-color-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--cx-spacing-3);
+            background: var(--cx-color-primary);
+            border: 1px solid var(--cx-color-border);
+            border-radius: var(--cx-border-radius);
+            color: var(--cx-color-text);
+            font-size: var(--cx-font-size-base);
+            transition: var(--cx-transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--cx-color-accent);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: var(--cx-color-gray-500);
+        }
+
+        /* Color Palette */
+        .color-palette {
+            background: var(--cx-color-secondary);
+            border: 1px solid var(--cx-color-border);
+            border-radius: var(--cx-border-radius-lg);
+            padding: var(--cx-spacing-6);
+        }
+
+        .color-palette h2 {
+            font-size: var(--cx-font-size-2xl);
+            font-weight: 600;
+            margin-bottom: var(--cx-spacing-4);
+            color: var(--cx-color-accent);
+            text-align: center;
+        }
+
+        .color-swatches {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--cx-spacing-4);
+        }
+
+        .color-swatch {
+            height: 120px;
+            border-radius: var(--cx-border-radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            border: 1px solid var(--cx-color-border);
+            transition: var(--cx-transition);
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.05);
+            box-shadow: var(--cx-box-shadow-lg);
+        }
+
+        .color-label {
+            font-weight: 600;
+            font-size: var(--cx-font-size-sm);
+            margin-bottom: var(--cx-spacing-1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .color-value {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: var(--cx-font-size-xs);
+            background: rgba(0, 0, 0, 0.7);
+            padding: var(--cx-spacing-1) var(--cx-spacing-2);
+            border-radius: var(--cx-border-radius-sm);
+            color: white;
+        }
+
+        .color-swatch.primary .color-label,
+        .color-swatch.background .color-label {
+            color: white;
+        }
+
+        .color-swatch.secondary .color-label {
+            color: var(--cx-color-gray-300);
+        }
+
+        .color-swatch.accent .color-label {
+            color: white;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--cx-spacing-3) var(--cx-spacing-4);
+            font-size: var(--cx-font-size-base);
+            font-weight: 500;
+            line-height: 1.5;
+            text-decoration: none;
+            border: 1px solid transparent;
+            border-radius: var(--cx-border-radius);
+            cursor: pointer;
+            transition: var(--cx-transition);
+            user-select: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Button Sizes */
+        .btn-sm {
+            padding: var(--cx-spacing-2) var(--cx-spacing-3);
+            font-size: var(--cx-font-size-sm);
+        }
+
+        .btn-lg {
+            padding: var(--cx-spacing-4) var(--cx-spacing-6);
+            font-size: var(--cx-font-size-lg);
+        }
+
+        /* Button Variants */
+        .btn-primary {
+            background-color: var(--cx-color-primary);
+            border-color: var(--cx-color-border);
+            color: var(--cx-color-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--cx-color-secondary);
+            border-color: var(--cx-color-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--cx-box-shadow-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--cx-color-secondary);
+            border-color: var(--cx-color-border);
+            color: var(--cx-color-text);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--cx-color-primary);
+            border-color: var(--cx-color-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--cx-box-shadow-hover);
+        }
+
+        .btn-accent {
+            background-color: var(--cx-color-accent);
+            border-color: var(--cx-color-accent);
+            color: var(--cx-color-background);
+        }
+
+        .btn-accent:hover {
+            background-color: #e55a2b;
+            border-color: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: var(--cx-box-shadow-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--cx-color-border);
+            color: var(--cx-color-text);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--cx-color-accent);
+            border-color: var(--cx-color-accent);
+            color: var(--cx-color-background);
+            transform: translateY(-2px);
+            box-shadow: var(--cx-box-shadow-hover);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .midnight-theme-container {
+                padding: var(--cx-spacing-4);
+            }
+
+            .theme-title {
+                font-size: var(--cx-font-size-3xl);
+            }
+
+            .theme-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .nav-list {
+                flex-direction: column;
+                gap: var(--cx-spacing-2);
+            }
+
+            .color-swatches {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .midnight-theme-container {
+                padding: var(--cx-spacing-2);
+            }
+
+            .color-swatches {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Accessibility Improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High Contrast Mode */
+        @media (prefers-contrast: high) {
+            :root {
+                --cx-color-border: #666666;
+                --cx-box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .midnight-theme-container {
+                background: white !important;
+                color: black !important;
+            }
+
+            .theme-controls {
+                display: none;
+            }
+
+            .btn {
+                border: 1px solid black !important;
+                background: white !important;
+                color: black !important;
+            }
+        }
+
+        /* Demo Info Banner */
+        .demo-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--cx-color-accent);
+            color: var(--cx-color-background);
+            padding: var(--cx-spacing-2);
+            text-align: center;
+            font-size: var(--cx-font-size-sm);
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: var(--cx-box-shadow);
+        }
+
+        .demo-banner + .midnight-theme-container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Banner -->
+    <div class="demo-banner">
+        🌙 Midnight Black Theme Demo - Generated by Spartacus MCP Server
+    </div>
+
+    <div class="midnight-theme-container">
+        <!-- Theme Header -->
+        <header class="theme-header">
+            <h1 class="theme-title">Midnight Black Theme</h1>
+            <p class="theme-description">A modern, dark, and professional theme for SAP Spartacus e-commerce applications</p>
+        </header>
+
+        <!-- Theme Controls -->
+        <div class="theme-controls">
+            <button class="btn btn-primary theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon" aria-hidden="true"></i>
+                Toggle Theme
+            </button>
+            
+            <button class="btn btn-secondary theme-reset" onclick="resetTheme()">
+                <i class="fas fa-undo" aria-hidden="true"></i>
+                Reset Theme
+            </button>
+        </div>
+
+        <!-- Theme Preview -->
+        <div class="theme-preview">
+            <div class="preview-section">
+                <h2>Navigation Preview</h2>
+                <nav class="preview-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Products</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Categories</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="preview-section">
+                <h2>Button Styles</h2>
+                <div class="button-group">
+                    <button class="btn btn-primary">Primary Button</button>
+                    <button class="btn btn-secondary">Secondary Button</button>
+                    <button class="btn btn-accent">Accent Button</button>
+                    <button class="btn btn-outline">Outline Button</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h2>Product Cards</h2>
+                <div class="card-grid">
+                    <div class="preview-card">
+                        <div class="card-header">
+                            <h3>Premium Product</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>This is a sample product card with the midnight theme applied. Perfect for showcasing premium products.</p>
+                            <div class="card-price">$299.99</div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-accent btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="preview-card">
+                        <div class="card-header">
+                            <h3>Featured Item</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Another example card showing the theme's styling capabilities with elegant dark design.</p>
+                            <div class="card-badge">New</div>
+                            <div class="card-price">$149.99</div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary btn-sm">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h2>Form Elements</h2>
+                <form class="preview-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" rows="3" placeholder="Your message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-accent">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Theme Color Palette -->
+        <div class="color-palette">
+            <h2>Color Palette</h2>
+            <div class="color-swatches">
+                <div class="color-swatch primary" style="background-color: #000000;">
+                    <span class="color-label">Primary</span>
+                    <span class="color-value">#000000</span>
+                </div>
+                <div class="color-swatch secondary" style="background-color: #1a1a1a;">
+                    <span class="color-label">Secondary</span>
+                    <span class="color-value">#1a1a1a</span>
+                </div>
+                <div class="color-swatch accent" style="background-color: #ff6b35;">
+                    <span class="color-label">Accent</span>
+                    <span class="color-value">#ff6b35</span>
+                </div>
+                <div class="color-swatch background" style="background-color: #0d0d0d;">
+                    <span class="color-label">Background</span>
+                    <span class="color-value">#0d0d0d</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        let isLightTheme = false;
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            
+            if (isLightTheme) {
+                // Switch to dark theme
+                root.style.setProperty('--cx-color-primary', '#000000');
+                root.style.setProperty('--cx-color-secondary', '#1a1a1a');
+                root.style.setProperty('--cx-color-background', '#0d0d0d');
+                root.style.setProperty('--cx-color-text', '#ffffff');
+                root.style.setProperty('--cx-color-border', '#333333');
+                document.querySelector('.theme-toggle i').className = 'fas fa-moon';
+                isLightTheme = false;
+            } else {
+                // Switch to light theme
+                root.style.setProperty('--cx-color-primary', '#ffffff');
+                root.style.setProperty('--cx-color-secondary', '#f8f9fa');
+                root.style.setProperty('--cx-color-background', '#ffffff');
+                root.style.setProperty('--cx-color-text', '#212529');
+                root.style.setProperty('--cx-color-border', '#dee2e6');
+                document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+                isLightTheme = true;
+            }
+        }
+
+        function resetTheme() {
+            const root = document.documentElement;
+            
+            // Reset to default midnight theme
+            root.style.setProperty('--cx-color-primary', '#000000');
+            root.style.setProperty('--cx-color-secondary', '#1a1a1a');
+            root.style.setProperty('--cx-color-background', '#0d0d0d');
+            root.style.setProperty('--cx-color-text', '#ffffff');
+            root.style.setProperty('--cx-color-accent', '#ff6b35');
+            root.style.setProperty('--cx-color-border', '#333333');
+            root.style.setProperty('--cx-color-shadow', 'rgba(255, 255, 255, 0.1)');
+            
+            document.querySelector('.theme-toggle i').className = 'fas fa-moon';
+            isLightTheme = false;
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click effects to cards
+            const cards = document.querySelectorAll('.preview-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Add ripple effect to buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.3);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        pointer-events: none;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // Add CSS for ripple animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html> 

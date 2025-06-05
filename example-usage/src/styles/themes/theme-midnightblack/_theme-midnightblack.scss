@@ -1,0 +1,227 @@
+/*
+ * SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Theme: Midnight Black with Green Accent
+// Description: Professional midnight black theme with vibrant green accents for Spartacus composable storefront
+// Version: 1.0.0
+
+@import '~@spartacus/styles/scss/theme/santorini';
+
+// ========================================
+// MIDNIGHT BLACK THEME VARIABLES
+// ========================================
+
+// Core Brand Colors
+$cx-color-primary: #000000 !default;
+$cx-color-secondary: #1a1a1a !default;
+$cx-color-background: #0d0d0d !default;
+$cx-color-text: #ffffff !default;
+$cx-color-accent: #86BC24 !default;
+$cx-color-accent-hover: #75a520 !default;
+$cx-color-accent-light: #9dd42a !default;
+
+// Extended Color Palette
+$cx-color-inverse: #ffffff !default;
+$cx-color-success: #86BC24 !default;
+$cx-color-warning: #ffc107 !default;
+$cx-color-danger: #dc3545 !default;
+$cx-color-info: #17a2b8 !default;
+
+// Gray Scale
+$cx-color-gray-100: #f8f9fa !default;
+$cx-color-gray-200: #e9ecef !default;
+$cx-color-gray-300: #dee2e6 !default;
+$cx-color-gray-400: #ced4da !default;
+$cx-color-gray-500: #adb5bd !default;
+$cx-color-gray-600: #6c757d !default;
+$cx-color-gray-700: #495057 !default;
+$cx-color-gray-800: #343a40 !default;
+$cx-color-gray-900: #212529 !default;
+
+// Border and Shadow Colors
+$cx-color-border: #333333 !default;
+$cx-color-border-light: #444444 !default;
+$cx-color-shadow: rgba(255, 255, 255, 0.1) !default;
+
+// ========================================
+// COMPONENT SPECIFIC OVERRIDES
+// ========================================
+
+// Header Navigation
+$cx-header-bg: $cx-color-primary !default;
+$cx-header-border: $cx-color-border !default;
+$cx-header-text: $cx-color-text !default;
+$cx-header-link-hover: $cx-color-accent !default;
+
+// Footer
+$cx-footer-bg: $cx-color-primary !default;
+$cx-footer-text: $cx-color-gray-400 !default;
+$cx-footer-link: $cx-color-text !default;
+$cx-footer-link-hover: $cx-color-accent !default;
+
+// Buttons
+$cx-btn-primary-bg: $cx-color-accent !default;
+$cx-btn-primary-color: $cx-color-background !default;
+$cx-btn-primary-hover-bg: $cx-color-accent-hover !default;
+$cx-btn-secondary-bg: transparent !default;
+$cx-btn-secondary-color: $cx-color-accent !default;
+$cx-btn-secondary-border: $cx-color-accent !default;
+
+// Forms
+$cx-input-bg: $cx-color-secondary !default;
+$cx-input-border: $cx-color-border !default;
+$cx-input-color: $cx-color-text !default;
+$cx-input-focus-border: $cx-color-accent !default;
+$cx-input-placeholder: $cx-color-gray-500 !default;
+
+// Cards and Containers
+$cx-card-bg: $cx-color-secondary !default;
+$cx-card-border: $cx-color-border !default;
+$cx-card-hover-border: $cx-color-accent !default;
+
+// Product Components
+$cx-product-price-color: $cx-color-accent !default;
+$cx-product-rating-color: $cx-color-accent !default;
+$cx-product-badge-bg: $cx-color-accent !default;
+$cx-product-badge-color: $cx-color-background !default;
+
+// ========================================
+// RESPONSIVE BREAKPOINTS
+// ========================================
+
+$cx-breakpoint-xs: 0 !default;
+$cx-breakpoint-sm: 576px !default;
+$cx-breakpoint-md: 768px !default;
+$cx-breakpoint-lg: 992px !default;
+$cx-breakpoint-xl: 1200px !default;
+$cx-breakpoint-xxl: 1400px !default;
+
+// ========================================
+// SPACING AND LAYOUT
+// ========================================
+
+$cx-spacing-1: 0.25rem !default;
+$cx-spacing-2: 0.5rem !default;
+$cx-spacing-3: 0.75rem !default;
+$cx-spacing-4: 1rem !default;
+$cx-spacing-5: 1.25rem !default;
+$cx-spacing-6: 1.5rem !default;
+$cx-spacing-8: 2rem !default;
+$cx-spacing-10: 2.5rem !default;
+$cx-spacing-12: 3rem !default;
+$cx-spacing-16: 4rem !default;
+$cx-spacing-20: 5rem !default;
+
+// ========================================
+// BORDER RADIUS
+// ========================================
+
+$cx-border-radius: 0.375rem !default;
+$cx-border-radius-sm: 0.25rem !default;
+$cx-border-radius-lg: 0.5rem !default;
+$cx-border-radius-xl: 0.75rem !default;
+$cx-border-radius-full: 9999px !default;
+
+// ========================================
+// SHADOWS
+// ========================================
+
+$cx-box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.075) !default;
+$cx-box-shadow-sm: 0 0.0625rem 0.125rem rgba(255, 255, 255, 0.05) !default;
+$cx-box-shadow-lg: 0 0.5rem 1rem rgba(255, 255, 255, 0.15) !default;
+$cx-box-shadow-xl: 0 1.25rem 1.5rem rgba(255, 255, 255, 0.1) !default;
+$cx-box-shadow-hover: 0 0.25rem 0.5rem rgba(134, 188, 36, 0.3) !default;
+
+// ========================================
+// TRANSITIONS
+// ========================================
+
+$cx-transition: all 0.3s ease !default;
+$cx-transition-fast: all 0.15s ease !default;
+$cx-transition-slow: all 0.5s ease !default;
+
+// ========================================
+// TYPOGRAPHY
+// ========================================
+
+$cx-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !default;
+$cx-font-size-xs: 0.75rem !default;
+$cx-font-size-sm: 0.875rem !default;
+$cx-font-size-base: 1rem !default;
+$cx-font-size-lg: 1.125rem !default;
+$cx-font-size-xl: 1.25rem !default;
+$cx-font-size-2xl: 1.5rem !default;
+$cx-font-size-3xl: 1.875rem !default;
+$cx-font-size-4xl: 2.25rem !default;
+$cx-font-size-5xl: 3rem !default;
+$cx-font-size-6xl: 3.75rem !default;
+
+// ========================================
+// GLOBAL THEME STYLES
+// ========================================
+
+body {
+  background-color: $cx-color-background;
+  color: $cx-color-text;
+  font-family: $cx-font-family;
+  line-height: 1.6;
+}
+
+// Selection styles
+::selection {
+  background-color: $cx-color-accent;
+  color: $cx-color-background;
+}
+
+::-moz-selection {
+  background-color: $cx-color-accent;
+  color: $cx-color-background;
+}
+
+// ========================================
+// ACCESSIBILITY FEATURES
+// ========================================
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  $cx-color-border: #666666;
+  $cx-box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.2);
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Focus styles for accessibility
+:focus {
+  outline: 2px solid $cx-color-accent;
+  outline-offset: 2px;
+}
+
+// ========================================
+// COMPONENT IMPORTS (EXAMPLES)
+// ========================================
+
+// @import 'components/header';
+// @import 'components/footer';
+// @import 'components/navigation';
+// @import 'components/product-list';
+// @import 'components/product-details';
+// @import 'components/cart';
+// @import 'components/checkout';
+// @import 'components/forms';
+// @import 'components/buttons';
+// @import 'components/cards';
+
+// Custom components (uncomment when you create the corresponding SCSS files)
+// @import 'components/hero-banner';
+// @import 'components/product-grid';
+// @import 'components/recommendations'; 

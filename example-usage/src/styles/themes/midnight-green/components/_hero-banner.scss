@@ -1,0 +1,203 @@
+/*
+ * SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Hero Banner Component Theme Styles
+
+.cx-hero-banner {
+  // Component-specific theme variables
+  --component-accent: #{$cx-color-accent};
+  --component-accent-hover: #{$cx-color-accent-hover};
+  
+  // Base styles
+  background: linear-gradient(135deg, $cx-color-background 0%, $cx-color-secondary 100%);
+  border: 1px solid $cx-color-border;
+  border-radius: $cx-border-radius-lg;
+  padding: $cx-spacing-xl;
+  margin-bottom: $cx-spacing-lg;
+  position: relative;
+  overflow: hidden;
+  
+  // Background overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 0%, rgba(134, 188, 36, 0.1) 100%);
+    pointer-events: none;
+  }
+  
+  // Content container
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    
+    .hero-title {
+      color: $cx-color-text;
+      font-size: 2.5rem;
+      font-weight: $cx-font-weight-bold;
+      line-height: 1.2;
+      margin-bottom: $cx-spacing-md;
+      
+      @media (max-width: $cx-breakpoint-md) {
+        font-size: 2rem;
+      }
+      
+      @media (max-width: $cx-breakpoint-sm) {
+        font-size: 1.75rem;
+      }
+    }
+    
+    .hero-subtitle {
+      color: rgba($cx-color-text, 0.8);
+      font-size: 1.25rem;
+      line-height: 1.4;
+      margin-bottom: $cx-spacing-lg;
+      
+      @media (max-width: $cx-breakpoint-sm) {
+        font-size: 1.125rem;
+      }
+    }
+  }
+  
+  // Interactive elements
+  .btn-primary {
+    background-color: var(--component-accent);
+    border-color: var(--component-accent);
+    color: $cx-color-background;
+    padding: $cx-spacing-sm $cx-spacing-lg;
+    font-weight: $cx-font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: $cx-transition-base;
+    
+    &:hover {
+      background-color: var(--component-accent-hover);
+      border-color: var(--component-accent-hover);
+      transform: translateY(-2px);
+      box-shadow: $cx-shadow-lg;
+    }
+    
+    &:focus {
+      outline: 2px solid var(--component-accent);
+      outline-offset: 2px;
+    }
+  }
+  
+  .btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--component-accent);
+    color: var(--component-accent);
+    padding: $cx-spacing-sm $cx-spacing-lg;
+    font-weight: $cx-font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: $cx-transition-base;
+    margin-left: $cx-spacing-md;
+    
+    &:hover {
+      background-color: var(--component-accent);
+      color: $cx-color-background;
+      transform: translateY(-2px);
+    }
+    
+    &:focus {
+      outline: 2px solid var(--component-accent);
+      outline-offset: 2px;
+    }
+  }
+  
+  // Links and text
+  a {
+    color: var(--component-accent);
+    text-decoration: none;
+    transition: $cx-transition-base;
+    
+    &:hover {
+      color: var(--component-accent-hover);
+      text-decoration: underline;
+    }
+  }
+  
+  // Hero image
+  .hero-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0 $cx-border-radius-lg $cx-border-radius-lg 0;
+    
+    @media (max-width: $cx-breakpoint-lg) {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      margin-top: $cx-spacing-lg;
+      border-radius: $cx-border-radius;
+    }
+  }
+  
+  // Responsive layout
+  @media (max-width: $cx-breakpoint-lg) {
+    padding: $cx-spacing-lg;
+    text-align: center;
+    
+    .hero-content {
+      max-width: 100%;
+    }
+    
+    .btn-secondary {
+      margin-left: 0;
+      margin-top: $cx-spacing-sm;
+      display: block;
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: $cx-breakpoint-sm) {
+    padding: $cx-spacing-md;
+    
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      margin-left: 0;
+      margin-top: $cx-spacing-sm;
+    }
+  }
+  
+  // Animation on load
+  &.animate-in {
+    animation: heroSlideIn 0.8s ease-out;
+  }
+}
+
+@keyframes heroSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .cx-hero-banner {
+    border: 2px solid $cx-color-text;
+    
+    .hero-title,
+    .hero-subtitle {
+      color: $cx-color-text;
+    }
+  }
+} 

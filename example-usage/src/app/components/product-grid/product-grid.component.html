@@ -1,0 +1,269 @@
+<!--
+  SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
+  SPDX-License-Identifier: Apache-2.0
+-->
+
+<section class="cx-product-grid" [attr.aria-label]="title || 'Product Grid'">
+  
+  <!-- Grid header -->
+  <div class="cx-product-grid__header" *ngIf="title || showFilters">
+    <div class="container">
+      <div class="row align-items-center">
+        
+        <!-- Title -->
+        <div class="col-12 col-md-6">
+          <h2 class="cx-product-grid__title" *ngIf="title">{{ title }}</h2>
+        </div>
+        
+        <!-- Filters and sorting -->
+        <div class="col-12 col-md-6" *ngIf="showFilters">
+          <div class="cx-product-grid__controls">
+            
+            <!-- Sort dropdown -->
+            <div class="cx-product-grid__sort" *ngIf="sortOptions.length > 0">
+              <label for="sort-select" class="visually-hidden">Sort products by</label>
+              <select 
+                id="sort-select"
+                class="form-select"
+                [(ngModel)]="selectedSort"
+                (change)="onSortChange($event)">
+                <option value="">Sort by...</option>
+                <option 
+                  *ngFor="let option of sortOptions" 
+                  [value]="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+            
+            <!-- View toggle -->
+            <div class="cx-product-grid__view-toggle">
+              <button 
+                type="button"
+                class="btn btn-outline-secondary"
+                [class.active]="viewMode === 'grid'"
+                (click)="setViewMode('grid')"
+                aria-label="Grid view">
+                <i class="fas fa-th" aria-hidden="true"></i>
+              </button>
+              <button 
+                type="button"
+                class="btn btn-outline-secondary"
+                [class.active]="viewMode === 'list'"
+                (click)="setViewMode('list')"
+                aria-label="List view">
+                <i class="fas fa-list" aria-hidden="true"></i>
+              </button>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <!-- Loading state -->
+  <div 
+    class="cx-product-grid__loading text-center py-5" 
+    *ngIf="(loading$ | async)"
+    role="status" 
+    aria-live="polite">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading products...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading products...</p>
+  </div>
+  
+  <!-- Product grid -->
+  <div 
+    class="cx-product-grid__content" 
+    *ngIf="!(loading$ | async) && products.length > 0">
+    <div class="container">
+      
+      <!-- Grid view -->
+      <div 
+        class="row cx-product-grid__grid"
+        [class]="'cx-product-grid__grid--cols-' + columns"
+        *ngIf="viewMode === 'grid'">
+        
+        <div 
+          class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
+          [class]="getColumnClass()"
+          *ngFor="let product of displayedProducts; trackBy: trackByProductId">
+          
+          <!-- Product card -->
+          <div class="cx-product-card" [attr.data-product-id]="product.id">
+            
+            <!-- Product image -->
+            <div class="cx-product-card__image">
+              <img 
+                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                [alt]="product.name"
+                class="img-fluid"
+                loading="lazy">
+              
+              <!-- Product badges -->
+              <div class="cx-product-card__badges" *ngIf="product.badges?.length">
+                <span 
+                  class="badge"
+                  [class]="'badge-' + badge.type"
+                  *ngFor="let badge of product.badges">
+                  {{ badge.text }}
+                </span>
+              </div>
+              
+              <!-- Quick actions -->
+              <div class="cx-product-card__actions">
+                <button 
+                  type="button"
+                  class="btn btn-sm btn-outline-light"
+                  (click)="onQuickView(product)"
+                  [attr.aria-label]="'Quick view ' + product.name">
+                  <i class="fas fa-eye" aria-hidden="true"></i>
+                </button>
+                <button 
+                  type="button"
+                  class="btn btn-sm btn-outline-light"
+                  (click)="onToggleWishlist(product)"
+                  [attr.aria-label]="'Add ' + product.name + ' to wishlist'">
+                  <i class="fas fa-heart" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Product info -->
+            <div class="cx-product-card__info">
+              
+              <!-- Product name -->
+              <h3 class="cx-product-card__name">
+                <a 
+                  [routerLink]="['/product', product.id]"
+                  [attr.aria-label]="'View details for ' + product.name">
+                  {{ product.name }}
+                </a>
+              </h3>
+              
+              <!-- Product rating -->
+              <div class="cx-product-card__rating" *ngIf="showRatings && product.rating">
+                <div class="cx-rating" [attr.aria-label]="'Rating: ' + product.rating + ' out of 5 stars'">
+                  <i 
+                    class="fas fa-star"
+                    [class.text-warning]="i < product.rating"
+                    [class.text-muted]="i >= product.rating"
+                    *ngFor="let i of [1,2,3,4,5]"
+                    aria-hidden="true">
+                  </i>
+                  <span class="visually-hidden">{{ product.rating }} out of 5 stars</span>
+                </div>
+                <span class="cx-rating__count text-muted" *ngIf="product.reviewCount">
+                  ({{ product.reviewCount }})
+                </span>
+              </div>
+              
+              <!-- Product price -->
+              <div class="cx-product-card__price" *ngIf="showPrices">
+                <span 
+                  class="cx-price cx-price--current"
+                  [attr.aria-label]="'Current price: ' + (product.price | currency)">
+                  {{ product.price | currency }}
+                </span>
+                <span 
+                  class="cx-price cx-price--original text-muted"
+                  *ngIf="product.originalPrice && product.originalPrice !== product.price"
+                  [attr.aria-label]="'Original price: ' + (product.originalPrice | currency)">
+                  {{ product.originalPrice | currency }}
+                </span>
+              </div>
+              
+              <!-- Add to cart -->
+              <button 
+                type="button"
+                class="btn btn-primary btn-sm cx-product-card__add-to-cart"
+                (click)="onAddToCart(product)"
+                [disabled]="!product.inStock"
+                [attr.aria-label]="'Add ' + product.name + ' to cart'"
+                *ngIf="showAddToCart">
+                <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                {{ product.inStock ? 'Add to Cart' : 'Out of Stock' }}
+              </button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- List view -->
+      <div class="cx-product-grid__list" *ngIf="viewMode === 'list'">
+        <div 
+          class="cx-product-list-item"
+          *ngFor="let product of displayedProducts; trackBy: trackByProductId">
+          
+          <div class="row align-items-center">
+            
+            <!-- Product image -->
+            <div class="col-12 col-md-3">
+              <img 
+                [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                [alt]="product.name"
+                class="img-fluid"
+                loading="lazy">
+            </div>
+            
+            <!-- Product details -->
+            <div class="col-12 col-md-6">
+              <h3 class="cx-product-list-item__name">
+                <a [routerLink]="['/product', product.id]">{{ product.name }}</a>
+              </h3>
+              <p class="cx-product-list-item__description text-muted">
+                {{ product.description }}
+              </p>
+              <div class="cx-product-list-item__rating" *ngIf="showRatings && product.rating">
+                <!-- Rating stars here -->
+              </div>
+            </div>
+            
+            <!-- Product actions -->
+            <div class="col-12 col-md-3 text-end">
+              <div class="cx-product-list-item__price" *ngIf="showPrices">
+                <span class="cx-price cx-price--current">{{ product.price | currency }}</span>
+              </div>
+              <button 
+                type="button"
+                class="btn btn-primary"
+                (click)="onAddToCart(product)"
+                [disabled]="!product.inStock"
+                *ngIf="showAddToCart">
+                Add to Cart
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Empty state -->
+  <div 
+    class="cx-product-grid__empty text-center py-5" 
+    *ngIf="!(loading$ | async) && products.length === 0">
+    <i class="fas fa-box-open fa-3x text-muted mb-3" aria-hidden="true"></i>
+    <h3 class="text-muted">No products found</h3>
+    <p class="text-muted">Try adjusting your search or filter criteria.</p>
+  </div>
+  
+  <!-- Pagination -->
+  <div 
+    class="cx-product-grid__pagination" 
+    *ngIf="!(loading$ | async) && products.length > 0 && showPagination">
+    <nav aria-label="Product pagination">
+      <!-- Pagination controls would go here -->
+      <p class="text-center text-muted">
+        Showing {{ displayedProducts.length }} of {{ products.length }} products
+      </p>
+    </nav>
+  </div>
+  
+</section> 

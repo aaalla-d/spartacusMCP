@@ -1,0 +1,292 @@
+<!--
+  SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
+  SPDX-License-Identifier: Apache-2.0
+-->
+
+<section 
+  class="cx-recommendations"
+  [class.cx-recommendations--carousel]="layout === 'carousel'"
+  [class.cx-recommendations--grid]="layout === 'grid'"
+  [attr.aria-label]="title || 'Product Recommendations'">
+  
+  <!-- Section header -->
+  <div class="cx-recommendations__header" *ngIf="title">
+    <div class="container">
+      <div class="row align-items-center">
+        
+        <!-- Title -->
+        <div class="col-12 col-md-8">
+          <h2 class="cx-recommendations__title">{{ title }}</h2>
+          <p class="cx-recommendations__subtitle text-muted" *ngIf="subtitle">
+            {{ subtitle }}
+          </p>
+        </div>
+        
+        <!-- Navigation controls for carousel -->
+        <div class="col-12 col-md-4 text-end" *ngIf="layout === 'carousel'">
+          <div class="cx-recommendations__nav">
+            <button 
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="previousSlide()"
+              [disabled]="currentSlide === 0"
+              aria-label="Previous recommendations">
+              <i class="fas fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button 
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="nextSlide()"
+              [disabled]="currentSlide >= maxSlides - 1"
+              aria-label="Next recommendations">
+              <i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <!-- Loading state -->
+  <div 
+    class="cx-recommendations__loading text-center py-5" 
+    *ngIf="(loading$ | async)"
+    role="status" 
+    aria-live="polite">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading recommendations...</span>
+    </div>
+    <p class="mt-3 text-muted">Finding products you'll love...</p>
+  </div>
+  
+  <!-- Recommendations content -->
+  <div 
+    class="cx-recommendations__content" 
+    *ngIf="!(loading$ | async) && recommendations.length > 0">
+    <div class="container">
+      
+      <!-- Carousel layout -->
+      <div 
+        class="cx-recommendations__carousel"
+        *ngIf="layout === 'carousel'">
+        
+        <div 
+          class="cx-recommendations__carousel-track"
+          [style.transform]="'translateX(-' + (currentSlide * slideWidth) + '%)'">
+          
+          <div 
+            class="cx-recommendations__slide"
+            *ngFor="let product of recommendations; trackBy: trackByProductId">
+            
+            <!-- Product recommendation card -->
+            <div class="cx-recommendation-card" [attr.data-product-id]="product.id">
+              
+              <!-- Product image -->
+              <div class="cx-recommendation-card__image">
+                <img 
+                  [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                  [alt]="product.name"
+                  class="img-fluid"
+                  loading="lazy"
+                  (click)="onProductClick(product)">
+                
+                <!-- Recommendation badge -->
+                <div class="cx-recommendation-card__badge" *ngIf="recommendationType">
+                  <span class="badge badge-primary">{{ getRecommendationLabel() }}</span>
+                </div>
+                
+                <!-- Quick actions -->
+                <div class="cx-recommendation-card__actions">
+                  <button 
+                    type="button"
+                    class="btn btn-sm btn-primary"
+                    (click)="onAddToCart(product)"
+                    [attr.aria-label]="'Add ' + product.name + ' to cart'">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    type="button"
+                    class="btn btn-sm btn-outline-light"
+                    (click)="onToggleWishlist(product)"
+                    [attr.aria-label]="'Add ' + product.name + ' to wishlist'">
+                    <i class="fas fa-heart" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Product info -->
+              <div class="cx-recommendation-card__info">
+                
+                <!-- Product name -->
+                <h3 class="cx-recommendation-card__name">
+                  <a 
+                    [routerLink]="['/product', product.id]"
+                    (click)="onProductClick(product)"
+                    [attr.aria-label]="'View details for ' + product.name">
+                    {{ product.name }}
+                  </a>
+                </h3>
+                
+                <!-- Product rating -->
+                <div class="cx-recommendation-card__rating" *ngIf="product.rating">
+                  <div class="cx-rating" [attr.aria-label]="'Rating: ' + product.rating + ' out of 5 stars'">
+                    <i 
+                      class="fas fa-star"
+                      [class.text-warning]="i < product.rating"
+                      [class.text-muted]="i >= product.rating"
+                      *ngFor="let i of [1,2,3,4,5]"
+                      aria-hidden="true">
+                    </i>
+                  </div>
+                </div>
+                
+                <!-- Product price -->
+                <div class="cx-recommendation-card__price" *ngIf="showPrices">
+                  <span 
+                    class="cx-price cx-price--current"
+                    [attr.aria-label]="'Price: ' + (product.price | currency)">
+                    {{ product.price | currency }}
+                  </span>
+                  <span 
+                    class="cx-price cx-price--original text-muted"
+                    *ngIf="product.originalPrice && product.originalPrice !== product.price">
+                    {{ product.originalPrice | currency }}
+                  </span>
+                </div>
+                
+                <!-- Recommendation reason -->
+                <p class="cx-recommendation-card__reason text-muted small" *ngIf="product.recommendationReason">
+                  {{ product.recommendationReason }}
+                </p>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Carousel indicators -->
+        <div class="cx-recommendations__indicators" *ngIf="showIndicators">
+          <button 
+            type="button"
+            class="cx-recommendations__indicator"
+            [class.active]="i === currentSlide"
+            (click)="goToSlide(i)"
+            [attr.aria-label]="'Go to slide ' + (i + 1)"
+            *ngFor="let slide of slides; let i = index">
+          </button>
+        </div>
+        
+      </div>
+      
+      <!-- Grid layout -->
+      <div 
+        class="cx-recommendations__grid"
+        *ngIf="layout === 'grid'">
+        
+        <div class="row">
+          <div 
+            class="col-12 col-sm-6 col-md-4 col-lg-3"
+            *ngFor="let product of recommendations; trackBy: trackByProductId">
+            
+            <!-- Product recommendation card (same as carousel) -->
+            <div class="cx-recommendation-card" [attr.data-product-id]="product.id">
+              <!-- Same card content as carousel -->
+              <div class="cx-recommendation-card__image">
+                <img 
+                  [src]="product.imageUrl || 'assets/placeholder-product.jpg'"
+                  [alt]="product.name"
+                  class="img-fluid"
+                  loading="lazy"
+                  (click)="onProductClick(product)">
+                
+                <div class="cx-recommendation-card__badge" *ngIf="recommendationType">
+                  <span class="badge badge-primary">{{ getRecommendationLabel() }}</span>
+                </div>
+                
+                <div class="cx-recommendation-card__actions">
+                  <button 
+                    type="button"
+                    class="btn btn-sm btn-primary"
+                    (click)="onAddToCart(product)"
+                    [attr.aria-label]="'Add ' + product.name + ' to cart'">
+                    <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                  </button>
+                  <button 
+                    type="button"
+                    class="btn btn-sm btn-outline-light"
+                    (click)="onToggleWishlist(product)"
+                    [attr.aria-label]="'Add ' + product.name + ' to wishlist'">
+                    <i class="fas fa-heart" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="cx-recommendation-card__info">
+                <h3 class="cx-recommendation-card__name">
+                  <a 
+                    [routerLink]="['/product', product.id]"
+                    (click)="onProductClick(product)">
+                    {{ product.name }}
+                  </a>
+                </h3>
+                
+                <div class="cx-recommendation-card__rating" *ngIf="product.rating">
+                  <div class="cx-rating">
+                    <i 
+                      class="fas fa-star"
+                      [class.text-warning]="i < product.rating"
+                      [class.text-muted]="i >= product.rating"
+                      *ngFor="let i of [1,2,3,4,5]">
+                    </i>
+                  </div>
+                </div>
+                
+                <div class="cx-recommendation-card__price" *ngIf="showPrices">
+                  <span class="cx-price cx-price--current">{{ product.price | currency }}</span>
+                  <span 
+                    class="cx-price cx-price--original text-muted"
+                    *ngIf="product.originalPrice && product.originalPrice !== product.price">
+                    {{ product.originalPrice | currency }}
+                  </span>
+                </div>
+                
+                <p class="cx-recommendation-card__reason text-muted small" *ngIf="product.recommendationReason">
+                  {{ product.recommendationReason }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Empty state -->
+  <div 
+    class="cx-recommendations__empty text-center py-5" 
+    *ngIf="!(loading$ | async) && recommendations.length === 0">
+    <i class="fas fa-lightbulb fa-3x text-muted mb-3" aria-hidden="true"></i>
+    <h3 class="text-muted">No recommendations available</h3>
+    <p class="text-muted">Check back later for personalized product suggestions.</p>
+  </div>
+  
+  <!-- Auto-scroll controls -->
+  <div class="cx-recommendations__auto-scroll" *ngIf="autoScroll && layout === 'carousel'">
+    <button 
+      type="button"
+      class="btn btn-sm btn-outline-secondary"
+      (click)="toggleAutoScroll()"
+      [attr.aria-label]="autoScrollActive ? 'Pause auto-scroll' : 'Start auto-scroll'">
+      <i 
+        class="fas"
+        [class.fa-pause]="autoScrollActive"
+        [class.fa-play]="!autoScrollActive"
+        aria-hidden="true">
+      </i>
+      {{ autoScrollActive ? 'Pause' : 'Play' }}
+    </button>
+  </div>
+  
+</section> 
