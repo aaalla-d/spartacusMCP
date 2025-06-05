@@ -22,11 +22,30 @@ interface ComponentConfig {
   name: string;
   selector: string;
   category: string;
-  hasModule: boolean;
-  hasService: boolean;
-  hasModel: boolean;
+  outputPath: string;
+  hasModule?: boolean;
+  hasService?: boolean;
+  hasModel?: boolean;
   cmsComponent?: string;
   dependencies?: string[];
+}
+
+interface ServiceConfig {
+  name: string;
+  outputPath: string;
+  injectable?: boolean;
+  dependencies?: string[];
+}
+
+interface ModelConfig {
+  name: string;
+  outputPath: string;
+  properties?: Record<string, string>;
+  extends?: string;
+}
+
+interface ProjectAnalysisConfig {
+  projectPath: string;
 }
 
 class SpartacusMCPServer {
@@ -177,13 +196,13 @@ class SpartacusMCPServer {
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       switch (request.params.name) {
         case 'create_spartacus_component':
-          return this.createSpartacusComponent(request.params.arguments as ComponentConfig & { outputPath: string });
+          return this.createSpartacusComponent(request.params.arguments as unknown as ComponentConfig);
         case 'analyze_spartacus_structure':
-          return this.analyzeSpartacusStructure(request.params.arguments as { projectPath: string });
+          return this.analyzeSpartacusStructure(request.params.arguments as unknown as ProjectAnalysisConfig);
         case 'generate_spartacus_service':
-          return this.generateSpartacusService(request.params.arguments as { name: string; outputPath: string; injectable?: boolean; dependencies?: string[] });
+          return this.generateSpartacusService(request.params.arguments as unknown as ServiceConfig);
         case 'create_spartacus_model':
-          return this.createSpartacusModel(request.params.arguments as { name: string; outputPath: string; properties?: Record<string, string>; extends?: string });
+          return this.createSpartacusModel(request.params.arguments as unknown as ModelConfig);
         default:
           throw new McpError(
             ErrorCode.MethodNotFound,
@@ -193,7 +212,7 @@ class SpartacusMCPServer {
     });
   }
 
-  private async createSpartacusComponent(args: ComponentConfig & { outputPath: string }) {
+  private async createSpartacusComponent(args: ComponentConfig) {
     try {
       const {
         name,
@@ -213,39 +232,33 @@ class SpartacusMCPServer {
       // Create directory
       await fs.mkdir(componentDir, { recursive: true });
 
-      // Generate component files
       const files: string[] = [];
 
-      // Component TypeScript file
+      // Generate component files
       const componentTs = this.generateComponentTs(name, selector, dependencies);
       await fs.writeFile(path.join(componentDir, `${kebabName}.component.ts`), componentTs);
       files.push(`${kebabName}.component.ts`);
 
-      // Component HTML template
       const componentHtml = this.generateComponentHtml(name, selector);
       await fs.writeFile(path.join(componentDir, `${kebabName}.component.html`), componentHtml);
       files.push(`${kebabName}.component.html`);
 
-      // Component SCSS styles
       const componentScss = this.generateComponentScss(selector);
       await fs.writeFile(path.join(componentDir, `${kebabName}.component.scss`), componentScss);
       files.push(`${kebabName}.component.scss`);
 
-      // Component spec file
       const componentSpec = this.generateComponentSpec(name);
       await fs.writeFile(path.join(componentDir, `${kebabName}.component.spec.ts`), componentSpec);
       files.push(`${kebabName}.component.spec.ts`);
 
-      // Module file
       if (hasModule) {
         const moduleTs = this.generateModuleTs(name, cmsComponent);
         await fs.writeFile(path.join(componentDir, `${kebabName}.module.ts`), moduleTs);
         files.push(`${kebabName}.module.ts`);
       }
 
-      // Service file
       if (hasService) {
-        const serviceTs = this.generateServiceTs(name);
+        const serviceTs = this.generateServiceTs(name, true, dependencies);
         await fs.writeFile(path.join(componentDir, `${kebabName}.service.ts`), serviceTs);
         files.push(`${kebabName}.service.ts`);
 
@@ -254,14 +267,12 @@ class SpartacusMCPServer {
         files.push(`${kebabName}.service.spec.ts`);
       }
 
-      // Model file
       if (hasModel) {
-        const modelTs = this.generateModelTs(name);
+        const modelTs = this.generateModelTs(name, {}, undefined);
         await fs.writeFile(path.join(componentDir, `${kebabName}.model.ts`), modelTs);
         files.push(`${kebabName}.model.ts`);
       }
 
-      // Index file
       const indexTs = this.generateIndexTs(name, hasModule, hasService, hasModel);
       await fs.writeFile(path.join(componentDir, 'index.ts'), indexTs);
       files.push('index.ts');
@@ -270,7 +281,16 @@ class SpartacusMCPServer {
         content: [
           {
             type: 'text',
-            text: `Successfully created Spartacus component '${name}' in ${componentDir}\n\nGenerated files:\n${files.map(f => `- ${f}`).join('\n')}\n\nNext steps:\n1. Add the component to your feature module\n2. Configure CMS component mapping if needed\n3. Add routing configuration if required\n4. Implement component logic and styling`,
+            text: `✅ Successfully created Spartacus component '${name}'\n\n` +
+                  `📁 Component directory: ${componentDir}\n\n` +
+                  `📋 Generated files:\n${files.map(f => `  - ${f}`).join('\n')}\n\n` +
+                  `🎯 Category: ${category}\n` +
+                  `🏷️  Selector: ${selector}\n\n` +
+                  `Next steps:\n` +
+                  `1. Import the component module in your app module\n` +
+                  `2. Add the component to your templates\n` +
+                  `3. Customize the component logic and styling\n` +
+                  `4. Run tests to ensure everything works correctly`,
           },
         ],
       };
@@ -282,113 +302,148 @@ class SpartacusMCPServer {
     }
   }
 
-  private async analyzeSpartacusStructure(args: { projectPath: string }) {
+  private async analyzeSpartacusStructure(args: ProjectAnalysisConfig) {
     try {
       const { projectPath } = args;
       
-      const analysis = {
-        projectStructure: {} as Record<string, boolean>,
-        components: [] as string[],
-        services: [] as string[],
-        modules: [] as string[],
-        recommendations: [] as string[],
-      };
-
-      // Analyze project structure
-      const projectsPath = path.join(projectPath, 'projects');
-      const featureLibsPath = path.join(projectPath, 'feature-libs');
-      const integrationLibsPath = path.join(projectPath, 'integration-libs');
-
+      // Check if path exists
       try {
-        const projectsExists = await fs.access(projectsPath).then(() => true).catch(() => false);
-        const featureLibsExists = await fs.access(featureLibsPath).then(() => true).catch(() => false);
-        const integrationLibsExists = await fs.access(integrationLibsPath).then(() => true).catch(() => false);
-
-        analysis.projectStructure = {
-          hasProjects: projectsExists,
-          hasFeatureLibs: featureLibsExists,
-          hasIntegrationLibs: integrationLibsExists,
-        };
-
-        if (projectsExists) {
-          const projects = await fs.readdir(projectsPath);
-          analysis.recommendations.push(`Found ${projects.length} projects: ${projects.join(', ')}`);
-        }
-
-        if (featureLibsExists) {
-          const featureLibs = await fs.readdir(featureLibsPath);
-          analysis.recommendations.push(`Found ${featureLibs.length} feature libraries: ${featureLibs.join(', ')}`);
-        }
-
-      } catch (error) {
-        analysis.recommendations.push(`Error analyzing structure: ${error instanceof Error ? error.message : String(error)}`);
+        await fs.access(projectPath);
+      } catch {
+        throw new Error(`Project path does not exist: ${projectPath}`);
       }
 
-      analysis.recommendations.push(
-        'Recommended component structure:',
-        '- Place custom components in feature-libs for reusability',
-        '- Follow the established naming conventions (kebab-case for files, PascalCase for classes)',
-        '- Include proper CMS component configuration',
-        '- Add comprehensive unit tests',
-        '- Use Spartacus design tokens for styling'
-      );
+      const analysis = {
+        projectPath,
+        structure: {} as Record<string, any>,
+        recommendations: [] as string[],
+        spartacusVersion: 'Unknown',
+        angularVersion: 'Unknown',
+      };
+
+      // Analyze package.json
+      try {
+        const packageJsonPath = path.join(projectPath, 'package.json');
+        const packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8');
+        const packageJson = JSON.parse(packageJsonContent);
+        
+        // Extract versions
+        const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
+        analysis.spartacusVersion = deps['@spartacus/core'] || 'Not found';
+        analysis.angularVersion = deps['@angular/core'] || 'Not found';
+        
+        analysis.structure = {
+          hasPackageJson: true,
+          dependencies: Object.keys(packageJson.dependencies || {}),
+          devDependencies: Object.keys(packageJson.devDependencies || {}),
+        };
+      } catch (error) {
+        analysis.recommendations.push('⚠️  package.json not found or invalid');
+      }
+
+      // Check for common Spartacus directories
+      const commonDirs = ['src/app', 'src/assets', 'src/styles'];
+      for (const dir of commonDirs) {
+        try {
+          await fs.access(path.join(projectPath, dir));
+          (analysis.structure as any)[dir.replace('/', '_')] = true;
+        } catch {
+          (analysis.structure as any)[dir.replace('/', '_')] = false;
+          analysis.recommendations.push(`📁 Consider creating ${dir} directory`);
+        }
+      }
 
       return {
         content: [
           {
             type: 'text',
-            text: `Spartacus Project Analysis:\n\n${JSON.stringify(analysis, null, 2)}`,
+            text: `📊 Spartacus Project Analysis\n\n` +
+                  `📍 Project Path: ${projectPath}\n` +
+                  `🏷️  Spartacus Version: ${analysis.spartacusVersion}\n` +
+                  `🅰️  Angular Version: ${analysis.angularVersion}\n\n` +
+                  `📁 Project Structure:\n${JSON.stringify(analysis.structure, null, 2)}\n\n` +
+                  `💡 Recommendations:\n${analysis.recommendations.map(r => `  ${r}`).join('\n') || '  ✅ No issues found'}\n\n` +
+                  `🔍 Analysis completed successfully!`,
           },
         ],
       };
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to analyze structure: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to analyze project: ${error instanceof Error ? error.message : String(error)}`
       );
     }
   }
 
-  private async generateSpartacusService(args: { name: string; outputPath: string; injectable?: boolean; dependencies?: string[] }) {
+  private async generateSpartacusService(args: ServiceConfig) {
     try {
       const { name, outputPath, injectable = true, dependencies = [] } = args;
+      
       const kebabName = this.toKebabCase(name);
-
+      const serviceDir = path.join(outputPath, kebabName);
+      
+      await fs.mkdir(serviceDir, { recursive: true });
+      
+      const files: string[] = [];
+      
       const serviceTs = this.generateServiceTs(name, injectable, dependencies);
+      await fs.writeFile(path.join(serviceDir, `${kebabName}.service.ts`), serviceTs);
+      files.push(`${kebabName}.service.ts`);
+      
       const serviceSpec = this.generateServiceSpec(name);
-
-      await fs.writeFile(path.join(outputPath, `${kebabName}.service.ts`), serviceTs);
-      await fs.writeFile(path.join(outputPath, `${kebabName}.service.spec.ts`), serviceSpec);
-
+      await fs.writeFile(path.join(serviceDir, `${kebabName}.service.spec.ts`), serviceSpec);
+      files.push(`${kebabName}.service.spec.ts`);
+      
       return {
         content: [
           {
             type: 'text',
-            text: `Successfully generated Spartacus service '${name}' in ${outputPath}\n\nGenerated files:\n- ${kebabName}.service.ts\n- ${kebabName}.service.spec.ts`,
+            text: `✅ Successfully created Spartacus service '${name}'\n\n` +
+                  `📁 Service directory: ${serviceDir}\n\n` +
+                  `📋 Generated files:\n${files.map(f => `  - ${f}`).join('\n')}\n\n` +
+                  `🔧 Injectable: ${injectable}\n` +
+                  `📦 Dependencies: ${dependencies.length > 0 ? dependencies.join(', ') : 'None'}\n\n` +
+                  `Next steps:\n` +
+                  `1. Implement service methods\n` +
+                  `2. Add service to providers in module\n` +
+                  `3. Inject service in components that need it\n` +
+                  `4. Write unit tests for service methods`,
           },
         ],
       };
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to generate service: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to create service: ${error instanceof Error ? error.message : String(error)}`
       );
     }
   }
 
-  private async createSpartacusModel(args: { name: string; outputPath: string; properties?: Record<string, string>; extends?: string }) {
+  private async createSpartacusModel(args: ModelConfig) {
     try {
       const { name, outputPath, properties = {}, extends: extendsInterface } = args;
+      
       const kebabName = this.toKebabCase(name);
-
+      const modelPath = path.join(outputPath, `${kebabName}.model.ts`);
+      
+      await fs.mkdir(outputPath, { recursive: true });
+      
       const modelTs = this.generateModelTs(name, properties, extendsInterface);
-      await fs.writeFile(path.join(outputPath, `${kebabName}.model.ts`), modelTs);
-
+      await fs.writeFile(modelPath, modelTs);
+      
       return {
         content: [
           {
             type: 'text',
-            text: `Successfully generated Spartacus model '${name}' in ${outputPath}\n\nGenerated file:\n- ${kebabName}.model.ts`,
+            text: `✅ Successfully created Spartacus model '${name}'\n\n` +
+                  `📁 Model file: ${modelPath}\n\n` +
+                  `🏗️  Properties: ${Object.keys(properties).length > 0 ? Object.keys(properties).join(', ') : 'None defined'}\n` +
+                  `🔗 Extends: ${extendsInterface || 'None'}\n\n` +
+                  `Next steps:\n` +
+                  `1. Add additional properties as needed\n` +
+                  `2. Import model in components and services\n` +
+                  `3. Use model for type safety\n` +
+                  `4. Consider adding validation if needed`,
           },
         ],
       };
@@ -419,7 +474,6 @@ ${dependencyImports}
   templateUrl: './${this.toKebabCase(name)}.component.html',
   styleUrls: ['./${this.toKebabCase(name)}.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
 })
 export class ${name}Component {
   constructor() {
@@ -453,19 +507,17 @@ export class ${name}Component {
  * SPDX-License-Identifier: Apache-2.0
  */
 
-@import '@spartacus/styles/scss/theme';
-
 .${selector.replace('cx-', '')} {
   // TODO: Add component styles using Spartacus design tokens
   
   h2 {
-    @include type-style('heading', 2);
-    margin-bottom: var(--cx-margin, 1rem);
+    margin-bottom: 1rem;
+    font-weight: 600;
   }
 
   p {
-    @include type-style('body');
     color: var(--cx-color-text);
+    line-height: 1.5;
   }
 }
 `;
@@ -479,7 +531,6 @@ export class ${name}Component {
  */
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { I18nTestingModule } from '@spartacus/core';
 import { ${name}Component } from './${this.toKebabCase(name)}.component';
 
 describe('${name}Component', () => {
@@ -489,7 +540,6 @@ describe('${name}Component', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [${name}Component],
-      imports: [I18nTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(${name}Component);
@@ -508,13 +558,18 @@ describe('${name}Component', () => {
 
   private generateModuleTs(name: string, cmsComponent?: string): string {
     const cmsConfig = cmsComponent ? `
-    provideDefaultConfig(<CmsConfig>{
-      cmsComponents: {
-        ${cmsComponent}: {
-          component: ${name}Component,
-        },
-      },
-    }),` : '';
+import { CmsConfig } from '@spartacus/core';
+
+const cmsComponents: CmsConfig = {
+  cmsComponents: {
+    ${cmsComponent}: {
+      component: ${name}Component,
+    },
+  },
+};` : '';
+
+    const cmsImports = cmsComponent ? `
+    ConfigModule.withConfig(cmsComponents),` : '';
 
     return `/*
  * SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
@@ -522,20 +577,17 @@ describe('${name}Component', () => {
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {
-  CmsConfig,
-  I18nModule,
-  provideDefaultConfig,
-} from '@spartacus/core';
+import { CommonModule } from '@angular/common';
+import { ConfigModule } from '@spartacus/core';
 import { ${name}Component } from './${this.toKebabCase(name)}.component';
+${cmsConfig}
 
 @NgModule({
-  imports: [CommonModule, I18nModule],
-  providers: [${cmsConfig}
-  ],
   declarations: [${name}Component],
+  imports: [
+    CommonModule,${cmsImports}
+  ],
   exports: [${name}Component],
 })
 export class ${name}Module {}
@@ -558,7 +610,7 @@ import { Injectable } from '@angular/core';
 ${dependencyImports}
 ${injectableDecorator}export class ${name}Service {
   constructor() {
-    // TODO: Implement service logic
+    // TODO: Inject dependencies
   }
 
   // TODO: Add service methods
@@ -608,24 +660,18 @@ describe('${name}Service', () => {
 export interface ${name}${extendsClause} {
 ${propertyLines || '  // TODO: Add interface properties'}
 }
-
-// TODO: Add additional types and interfaces as needed
 `;
   }
 
   private generateIndexTs(name: string, hasModule: boolean, hasService: boolean, hasModel: boolean): string {
-    const exports = [];
-    
-    exports.push(`export * from './${this.toKebabCase(name)}.component';`);
+    const exports: string[] = [`export * from './${this.toKebabCase(name)}.component';`];
     
     if (hasModule) {
       exports.push(`export * from './${this.toKebabCase(name)}.module';`);
     }
-    
     if (hasService) {
       exports.push(`export * from './${this.toKebabCase(name)}.service';`);
     }
-    
     if (hasModel) {
       exports.push(`export * from './${this.toKebabCase(name)}.model';`);
     }
@@ -641,9 +687,7 @@ ${exports.join('\n')}
   }
 
   private toKebabCase(str: string): string {
-    return str
-      .replace(/([a-z])([A-Z])/g, '$1-$2')
-      .toLowerCase();
+    return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
   }
 
   async run() {

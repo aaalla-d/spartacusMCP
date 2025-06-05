@@ -3,24 +3,24 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "allowJs": true,
+    "outDir": "./dist",
+    "rootDir": "./",
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "outDir": "./dist",
-    "rootDir": "./",
-    "resolveJsonModule": true,
-    "types": ["node"]
+    "declarationMap": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
   "include": [
-    "*.ts"
+    "spartacus-mcp-server.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "spartacus"
+    "examples"
   ]
 } 

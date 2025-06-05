@@ -1,228 +1,174 @@
 # Spartacus MCP Server
 
-A Model Context Protocol (MCP) server for creating custom components in SAP Spartacus following established patterns and conventions.
+A Model Context Protocol (MCP) server that provides tools for creating custom components in SAP Spartacus following established patterns and conventions.
 
-## Overview
+## 🚀 Quick Start
 
-This MCP server provides tools to help developers create Spartacus components, services, and models that follow the SAP Spartacus coding standards and architectural patterns. It analyzes the existing Spartacus codebase structure and generates new components with proper file organization, naming conventions, and boilerplate code.
+### Prerequisites
 
-## Features
+- **Node.js 18+** - [Download here](https://nodejs.org/)
+- **MCP-compatible client** such as:
+  - [Claude Desktop](https://claude.ai/desktop)
+  - [Cline VS Code Extension](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev)
 
-- **Component Generation**: Create complete Spartacus components with TypeScript, HTML, SCSS, and test files
-- **Service Generation**: Generate Angular services following Spartacus patterns
-- **Model Creation**: Create TypeScript interfaces and models
-- **Project Analysis**: Analyze existing Spartacus project structure
-- **CMS Integration**: Automatic CMS component configuration
-- **Testing Support**: Generate unit test files with proper setup
+### Installation
 
-## Installation
-
-1. Clone this repository:
 ```bash
-git clone <repository-url>
+# Clone the repository
+git clone <your-repo-url>
 cd spartacus-mcp-server
-```
 
-2. Install dependencies:
-```bash
-npm install
-```
+# Install dependencies and build
+npm run setup
 
-3. Build the server:
-```bash
-npm run build
-```
-
-## Usage
-
-### Starting the Server
-
-```bash
+# Start the server
 npm start
 ```
 
-### Available Tools
+## 🔧 MCP Client Configuration
 
-#### 1. create_spartacus_component
+### Claude Desktop
 
-Creates a new Spartacus component with all necessary files.
+Add to your `claude_desktop_config.json`:
 
-**Parameters:**
-- `name` (required): Component name in PascalCase (e.g., "ProductIntro")
-- `selector` (required): Component selector (e.g., "cx-product-intro")
-- `category` (required): Component category (product, user, content, navigation, etc.)
-- `outputPath` (required): Output directory path
-- `hasModule` (optional): Whether to create a module file (default: true)
-- `hasService` (optional): Whether to create a service file (default: false)
-- `hasModel` (optional): Whether to create a model file (default: false)
-- `cmsComponent` (optional): CMS component name for configuration
-- `dependencies` (optional): Additional dependencies to import
-
-**Example:**
 ```json
 {
-  "name": "CustomProductCard",
-  "selector": "cx-custom-product-card",
+  "mcpServers": {
+    "spartacus-mcp": {
+      "command": "node",
+      "args": ["/absolute/path/to/spartacus-mcp-server/dist/spartacus-mcp-server.js"],
+      "env": {}
+    }
+  }
+}
+```
+
+### Cline VS Code Extension
+
+Add to your Cline settings:
+
+```json
+{
+  "cline.mcp.servers": [
+    {
+      "name": "spartacus-mcp",
+      "command": "node",
+      "args": ["/absolute/path/to/spartacus-mcp-server/dist/spartacus-mcp-server.js"]
+    }
+  ]
+}
+```
+
+## 🛠️ Available Tools
+
+### 1. Create Spartacus Component
+
+**Tool:** `create_spartacus_component`
+
+Creates a complete Spartacus component with all necessary files.
+
+```json
+{
+  "name": "ProductIntro",
+  "selector": "cx-product-intro",
   "category": "product",
   "outputPath": "./src/app/components",
   "hasModule": true,
-  "hasService": true,
-  "cmsComponent": "CustomProductCardComponent",
-  "dependencies": ["Product", "CurrentProductService"]
+  "hasService": false,
+  "hasModel": false,
+  "cmsComponent": "ProductIntroComponent",
+  "dependencies": ["ProductService"]
 }
 ```
 
-#### 2. analyze_spartacus_structure
+**Generated Files:**
+- Component TypeScript, HTML, SCSS, and spec files
+- Angular module (optional)
+- Service and spec files (optional)
+- TypeScript model (optional)
+- Index file with exports
 
-Analyzes the Spartacus project structure and provides insights.
+### 2. Analyze Spartacus Structure
 
-**Parameters:**
-- `projectPath` (required): Path to the Spartacus project
+**Tool:** `analyze_spartacus_structure`
 
-**Example:**
+Analyzes your Spartacus project structure and provides insights.
+
 ```json
 {
-  "projectPath": "./spartacus"
+  "projectPath": "./my-spartacus-project"
 }
 ```
 
-#### 3. generate_spartacus_service
+### 3. Generate Spartacus Service
 
-Generates a Spartacus service following established patterns.
+**Tool:** `generate_spartacus_service`
 
-**Parameters:**
-- `name` (required): Service name in PascalCase
-- `outputPath` (required): Output directory path
-- `injectable` (optional): Whether the service should be injectable (default: true)
-- `dependencies` (optional): Service dependencies
+Creates a Spartacus service following established patterns.
 
-**Example:**
 ```json
 {
-  "name": "CustomProductService",
+  "name": "ProductDataService",
   "outputPath": "./src/app/services",
   "injectable": true,
-  "dependencies": ["HttpClient", "OccEndpointsService"]
+  "dependencies": ["HttpClient", "ConfigService"]
 }
 ```
 
-#### 4. create_spartacus_model
+### 4. Create Spartacus Model
 
-Creates TypeScript interfaces and models for Spartacus.
+**Tool:** `create_spartacus_model`
 
-**Parameters:**
-- `name` (required): Model name in PascalCase
-- `outputPath` (required): Output directory path
-- `properties` (optional): Model properties with their types
-- `extends` (optional): Interface to extend from
+Creates TypeScript interfaces and models.
 
-**Example:**
 ```json
 {
-  "name": "CustomProduct",
+  "name": "ProductData",
   "outputPath": "./src/app/models",
   "properties": {
-    "customField": "string",
-    "additionalData": "any"
+    "id": "string",
+    "name": "string",
+    "price": "number"
   },
-  "extends": "Product"
+  "extends": "BaseProduct"
 }
 ```
 
-## Generated File Structure
+## 📚 Documentation
 
-When creating a component, the following files are generated:
+- **[Deployment Guide](DEPLOYMENT_GUIDE.md)** - Complete setup and configuration instructions
+- **[Example Usage](example-usage.md)** - Real-world scenarios and code examples
+- **[Examples Directory](examples/)** - Comprehensive tool examples and patterns
 
-```
-custom-component/
-├── custom-component.component.ts      # Component class
-├── custom-component.component.html    # Template
-├── custom-component.component.scss    # Styles
-├── custom-component.component.spec.ts # Unit tests
-├── custom-component.module.ts         # Angular module (if hasModule: true)
-├── custom-component.service.ts        # Service (if hasService: true)
-├── custom-component.service.spec.ts   # Service tests (if hasService: true)
-├── custom-component.model.ts          # Models (if hasModel: true)
-└── index.ts                          # Barrel export
-```
+## 🏗️ Generated Code Features
 
-## Spartacus Conventions
+- ✅ Follows Spartacus conventions and best practices
+- ✅ TypeScript strict mode compliance
+- ✅ OnPush change detection strategy
+- ✅ Internationalization (i18n) ready
+- ✅ SCSS with Spartacus design tokens
+- ✅ Comprehensive unit tests
+- ✅ CMS component configuration
+- ✅ Proper dependency injection
 
-The generated code follows these Spartacus conventions:
-
-### File Naming
-- Components: `kebab-case.component.ts`
-- Services: `kebab-case.service.ts`
-- Models: `kebab-case.model.ts`
-- Modules: `kebab-case.module.ts`
-
-### Class Naming
-- Components: `PascalCaseComponent`
-- Services: `PascalCaseService`
-- Interfaces: `PascalCase`
-
-### Component Structure
-- Uses OnPush change detection strategy
-- Includes proper SPDX license headers
-- Follows Spartacus import patterns
-- Uses Spartacus design tokens in SCSS
-- Includes i18n support with `cxTranslate` pipe
-
-### Module Configuration
-- Includes CMS component configuration when specified
-- Imports necessary Spartacus modules
-- Provides proper default configuration
-
-## Integration with Spartacus
-
-### Adding to Feature Libraries
-
-Place generated components in feature libraries for better organization:
+## 🔍 Project Structure
 
 ```
-feature-libs/
-└── my-feature/
-    ├── components/
-    │   └── custom-component/
-    ├── services/
-    └── models/
+spartacus-mcp-server/
+├── spartacus-mcp-server.ts     # Main MCP server
+├── package.json                # Dependencies and scripts
+├── tsconfig.json              # TypeScript configuration
+├── DEPLOYMENT_GUIDE.md        # Detailed setup guide
+├── example-usage.md           # Usage examples
+├── examples/                  # Tool examples
+│   ├── component-generation/  # Component tools
+│   ├── service-management/    # Service tools
+│   ├── project-analysis/      # Analysis tools
+│   └── ...                   # Other categories
+└── dist/                     # Compiled JavaScript
 ```
 
-### CMS Component Registration
-
-When using the `cmsComponent` parameter, the generated module includes:
-
-```typescript
-provideDefaultConfig(<CmsConfig>{
-  cmsComponents: {
-    CustomComponentName: {
-      component: CustomComponent,
-    },
-  },
-})
-```
-
-### Styling with Design Tokens
-
-Generated SCSS files use Spartacus design tokens:
-
-```scss
-@import '@spartacus/styles/scss/theme';
-
-.component-class {
-  h2 {
-    @include type-style('heading', 2);
-    margin-bottom: var(--cx-margin, 1rem);
-  }
-  
-  p {
-    @include type-style('body');
-    color: var(--cx-color-text);
-  }
-}
-```
-
-## Development
+## 🚀 Development
 
 ### Building
 
@@ -233,48 +179,63 @@ npm run build
 ### Development Mode
 
 ```bash
-npm run dev
+npm run dev  # Watch mode
 ```
 
-### Project Structure
+### Testing the Server
 
-```
-├── spartacus-mcp-server.ts    # Main MCP server implementation
-├── package.json               # Dependencies and scripts
-├── tsconfig.json             # TypeScript configuration
-├── README.md                 # This file
-└── spartacus/                # Cloned Spartacus repository
+```bash
+# Start the server
+npm start
+
+# The server will log: "Spartacus MCP server running on stdio"
 ```
 
-## Contributing
+## 🎯 Use Cases
+
+### Component Development
+- Scaffold new Spartacus components
+- Generate services and models
+- Create CMS component configurations
+- Set up proper testing structure
+
+### Project Analysis
+- Analyze existing Spartacus projects
+- Get version compatibility information
+- Receive recommendations for improvements
+
+### Code Generation
+- Generate TypeScript interfaces
+- Create Angular services
+- Build component modules
+- Set up proper file structure
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+1. **Server won't start**: Check Node.js version (18+)
+2. **Build errors**: Run `npm run clean && npm run build`
+3. **MCP client can't connect**: Verify absolute path in configuration
+
+### Debug Mode
+
+```bash
+DEBUG=* npm start
+```
+
+## 📄 License
+
+Apache 2.0 License - see LICENSE file for details.
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
+4. Add tests
 5. Submit a pull request
 
-## License
+---
 
-This project is licensed under the Apache 2.0 License - see the LICENSE file for details.
-
-## Related Resources
-
-- [SAP Spartacus Documentation](https://sap.github.io/spartacus-docs/)
-- [Spartacus GitHub Repository](https://github.com/SAP/spartacus)
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [Angular Style Guide](https://angular.io/guide/styleguide)
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Module not found errors**: Ensure all dependencies are installed with `npm install`
-2. **Permission errors**: Check file permissions in the output directory
-3. **Invalid component names**: Use PascalCase for component names and kebab-case for selectors
-
-### Getting Help
-
-- Check the [Spartacus documentation](https://sap.github.io/spartacus-docs/)
-- Review existing components in the Spartacus codebase for patterns
-- Open an issue in this repository for bugs or feature requests 
+**Happy Spartacus Development! 🛍️** 
