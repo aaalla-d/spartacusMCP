@@ -300,4 +300,36 @@ This example demonstrates:
 
 **This example demonstrates the full capabilities of the Spartacus MCP server!** 🎉
 
-Use it as a reference, starting point, or inspiration for your own e-commerce themes and components. 
+Use it as a reference, starting point, or inspiration for your own e-commerce themes and components.
+
+## 🚨 **Important: Using These Examples**
+
+### **Compile-Time Considerations**
+
+These example files are **templates** and require proper setup to compile:
+
+1. **SCSS Theme Files**: Component imports are commented out to prevent compile errors
+   ```scss
+   // Uncomment these imports as you create corresponding SCSS files:
+   // @import 'components/hero-banner';
+   // @import 'components/product-grid';
+   ```
+
+2. **TypeScript Modules**: Spartacus imports are commented out for standalone use
+   ```typescript
+   // Uncomment when Spartacus is installed:
+   // import { I18nModule, ConfigModule } from '@spartacus/core';
+   ```
+
+3. **Required Dependencies**: Install these before using the components:
+   ```bash
+   npm install @angular/core @angular/common @angular/forms @angular/router
+   npm install @spartacus/core @spartacus/storefront  # Optional
+   ```
+
+### **How to Use These Files**
+
+1. **Copy to your project**: Don't use directly - copy and adapt to your needs
+2. **Uncomment imports**: Enable imports as you add dependencies
+3. **Create missing files**: Add component SCSS files as referenced in themes
+4. **Customize**: Modify colors, spacing, and functionality for your brand

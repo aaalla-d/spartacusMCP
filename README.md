@@ -2,6 +2,17 @@
 
 A Model Context Protocol (MCP) server that provides tools for generating SAP Commerce Cloud Spartacus storefront components, themes, and complete e-commerce implementations.
 
+## ⚠️ **Important: Example Files**
+
+The `example-usage/` directory contains **template files** that demonstrate the MCP server's capabilities. These files:
+
+- **Are not meant to be compiled directly** - they're examples and templates
+- **Have commented-out imports** to prevent compile-time errors
+- **Require proper Angular/Spartacus setup** to use in real projects
+- **Should be copied and adapted** to your specific project needs
+
+See `example-usage/README.md` for detailed usage instructions.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -193,25 +204,26 @@ npm start
 
 ```
 spartacus-mcp-server/
-├── README.md                    # This file
-├── package.json                 # Dependencies and scripts
-├── tsconfig.json               # TypeScript configuration
-├── spartacus-mcp-server.ts     # Main MCP server implementation
-├── index.ts                    # Server entry point
-├── tools.ts                    # Tool definitions and handlers
-├── toolHandler.ts              # Tool execution logic
-├── requestHandler.ts           # Request processing
-├── setup.sh                    # Setup script
-├── dist/                       # Compiled JavaScript
-├── examples/                   # Usage examples
-├── scripts/                    # Build and utility scripts
-├── tools/                      # Additional tooling
-├── utils/                      # Utility functions
-└── example-usage/              # Complete theme example
-    ├── README.md               # Theme documentation
-    ├── EXAMPLE_PROMPTS.md      # Usage examples
-    ├── src/                    # Generated theme source
-    └── test-theme-demo/        # Demo implementation
+├── src/
+│   └── spartacus-mcp-server.ts     # Main MCP server implementation
+├── example-usage/                   # Complete example implementation
+│   ├── README.md                   # Detailed example documentation
+│   ├── EXAMPLE_PROMPTS.md          # Sample prompts and usage
+│   └── src/
+│       ├── app/
+│       │   ├── components/         # Main application components
+│       │   │   ├── hero-banner/    # Hero banner component
+│       │   │   ├── product-grid/   # Product grid component
+│       │   │   └── recommendations/ # Recommendations component
+│       │   └── shared/             # Shared utilities and form components
+│       │       └── shared-components.module.ts
+│       ├── styles/
+│       │   └── themes/
+│       │       └── midnight-green/ # Complete Spartacus theme
+│       └── test-theme-demo/        # Visual demo files
+├── dist/                           # Compiled TypeScript
+├── package.json                    # Dependencies and scripts
+└── README.md                       # This file
 ```
 
 ## 🎨 Example Usage
@@ -252,20 +264,47 @@ Create a homepage with:
 
 ## 🔧 Development
 
-### Build the server:
+### Building the Project
 ```bash
 npm run build
 ```
 
-### Run in development mode:
-```bash
-npm run dev
-```
-
-### Test the server:
+### Running Tests
 ```bash
 npm test
 ```
+
+### Code Quality
+The generated components follow modern TypeScript and Angular best practices:
+
+- **Type Safety**: All components use proper TypeScript interfaces and types
+- **Performance**: OnPush change detection and optimized rendering
+- **Accessibility**: WCAG 2.1 AA compliance with proper ARIA attributes
+- **Maintainability**: Clean code structure with separation of concerns
+- **Documentation**: Comprehensive JSDoc comments and usage examples
+
+### Example Component Features
+The example components in `example-usage/` demonstrate:
+
+- **Hero Banner Component**:
+  - Responsive design with mobile-first approach
+  - Configurable themes and layouts
+  - Analytics tracking integration
+  - Accessibility features (ARIA labels, keyboard navigation)
+  - Image optimization and lazy loading
+
+- **Product Grid Component**:
+  - Advanced filtering and sorting capabilities
+  - Pagination with customizable page sizes
+  - Product search and category filtering
+  - Shopping cart integration
+  - Price formatting and currency support
+  - Stock status indicators
+
+- **Shared Components Module**:
+  - Reusable form elements and utilities
+  - Consistent styling and behavior
+  - Proper dependency injection setup
 
 ## 🛠️ Troubleshooting IDE Integration
 
@@ -413,12 +452,25 @@ We're working on plugins for:
 
 ## 🎯 Use Cases
 
-- **Rapid Prototyping** - Quickly generate Spartacus storefronts
-- **Theme Development** - Create custom themes and branding
-- **Component Library** - Build reusable component collections
-- **Learning Tool** - Understand Spartacus architecture and patterns
-- **Client Demos** - Generate impressive e-commerce demos
-- **Development Acceleration** - Speed up Spartacus development
+### Component Generation
+- **Hero Banners**: Responsive banners with CTAs, background images, and themes
+- **Product Grids**: Configurable product displays with filtering and sorting
+- **Navigation**: Breadcrumbs, menus, and navigation components
+- **Forms**: Contact forms, search bars, and user input components
+- **Content**: Carousels, testimonials, and content blocks
+
+### Theme Development
+- **Color Schemes**: Generate complete color palettes with accessibility compliance
+- **Typography**: Custom font stacks and responsive typography scales
+- **Layout**: Grid systems, spacing, and responsive breakpoints
+- **Components**: Styled components matching your brand guidelines
+
+### Code Quality Features
+- **TypeScript**: Fully typed components with proper interfaces
+- **Accessibility**: ARIA attributes, keyboard navigation, and screen reader support
+- **Performance**: Optimized images, lazy loading, and efficient rendering
+- **Testing**: Component tests and integration examples
+- **Documentation**: Comprehensive JSDoc comments and usage examples
 
 ## 📄 License
 

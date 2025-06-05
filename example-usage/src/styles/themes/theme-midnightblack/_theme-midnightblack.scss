@@ -207,19 +207,21 @@ body {
 }
 
 // ========================================
-// COMPONENT IMPORTS
+// COMPONENT IMPORTS (EXAMPLES)
 // ========================================
 
-@import 'components/header';
-@import 'components/footer';
-@import 'components/navigation';
-@import 'components/product-list';
-@import 'components/product-details';
-@import 'components/cart';
-@import 'components/checkout';
-@import 'components/forms';
-@import 'components/buttons';
-@import 'components/cards';
-@import 'components/hero-banner';
-@import 'components/product-grid';
-@import 'components/recommendations'; 
+// @import 'components/header';
+// @import 'components/footer';
+// @import 'components/navigation';
+// @import 'components/product-list';
+// @import 'components/product-details';
+// @import 'components/cart';
+// @import 'components/checkout';
+// @import 'components/forms';
+// @import 'components/buttons';
+// @import 'components/cards';
+
+// Custom components (uncomment when you create the corresponding SCSS files)
+// @import 'components/hero-banner';
+// @import 'components/product-grid';
+// @import 'components/recommendations'; 

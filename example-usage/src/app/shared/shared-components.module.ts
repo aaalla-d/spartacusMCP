@@ -2,43 +2,83 @@
  * SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
  *
  * SPDX-License-Identifier: Apache-2.0
+ * 
+ * NOTE: This module contains shared form elements and utilities
+ * Main application components should be placed in app/components/
+ * 
+ * To use this module, ensure you have the following dependencies installed:
+ * - @angular/core
+ * - @angular/common  
+ * - @angular/forms
+ * - @angular/router
+ * - @spartacus/core (optional, uncomment imports when available)
  */
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { I18nModule, ConfigModule } from '@spartacus/core';
-import { HeroBannerComponent } from './components/hero-banner/hero-banner.component';
-import { ProductGridComponent } from './components/product-grid/product-grid.component';
-import { RecommendationsComponent } from './components/recommendations/recommendations.component';
-import { HeroBannerService } from './components/hero-banner/hero-banner.service';
-import { ProductGridService } from './components/product-grid/product-grid.service';
-import { RecommendationsService } from './components/recommendations/recommendations.service';
+
+// Spartacus imports (uncomment when Spartacus is installed)
+// import { I18nModule, ConfigModule } from '@spartacus/core';
+
+// Shared form components (create these for reusable form elements)
+// import { CustomInputComponent } from './form-elements/custom-input/custom-input.component';
+// import { CustomSelectComponent } from './form-elements/custom-select/custom-select.component';
+// import { CustomCheckboxComponent } from './form-elements/custom-checkbox/custom-checkbox.component';
+// import { CustomRadioComponent } from './form-elements/custom-radio/custom-radio.component';
+// import { FormValidationComponent } from './form-elements/form-validation/form-validation.component';
+
+// Shared utility components
+// import { LoadingSpinnerComponent } from './utilities/loading-spinner/loading-spinner.component';
+// import { ConfirmDialogComponent } from './utilities/confirm-dialog/confirm-dialog.component';
+// import { ToastNotificationComponent } from './utilities/toast-notification/toast-notification.component';
 
 @NgModule({
   declarations: [
-    HeroBannerComponent,
-    ProductGridComponent,
-    RecommendationsComponent
+    // Shared form elements (uncomment as you create them)
+    // CustomInputComponent,
+    // CustomSelectComponent,
+    // CustomCheckboxComponent,
+    // CustomRadioComponent,
+    // FormValidationComponent,
+    
+    // Shared utility components (uncomment as you create them)
+    // LoadingSpinnerComponent,
+    // ConfirmDialogComponent,
+    // ToastNotificationComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    I18nModule,
-    ConfigModule,
+    // Uncomment these when Spartacus is installed:
+    // I18nModule,
+    // ConfigModule,
     RouterModule
   ],
   exports: [
-    HeroBannerComponent,
-    ProductGridComponent,
-    RecommendationsComponent
+    // Export shared components for use in other modules
+    // CustomInputComponent,
+    // CustomSelectComponent,
+    // CustomCheckboxComponent,
+    // CustomRadioComponent,
+    // FormValidationComponent,
+    // LoadingSpinnerComponent,
+    // ConfirmDialogComponent,
+    // ToastNotificationComponent,
+    
+    // Re-export common modules for convenience
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule
   ],
   providers: [
-    HeroBannerService,
-    ProductGridService,
-    RecommendationsService
+    // Shared services (uncomment as you create them)
+    // FormValidationService,
+    // NotificationService,
+    // UtilityService,
   ],
 })
 export class SharedComponentsModule {} 
