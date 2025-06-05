@@ -1,0 +1,57 @@
+# Source files
+src/
+*.ts
+!dist/**/*.d.ts
+
+# Development files
+.git/
+.gitignore
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+coverage/
+
+# Build artifacts
+node_modules/
+.nyc_output/
+.cache/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Scripts (keep only essential ones)
+scripts/
+
+# Keep these files
+!dist/
+!README.md
+!LICENSE
+!DEPLOYMENT_GUIDE.md
+!example-usage.md
+!examples/ 

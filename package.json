@@ -1,15 +1,27 @@
 {
   "name": "spartacus-mcp-server",
   "version": "1.0.0",
-  "description": "MCP server for SAP Spartacus development tools",
+  "description": "MCP server for SAP Spartacus development tools - Generate components, services, and models following Spartacus conventions",
   "main": "dist/spartacus-mcp-server.js",
+  "bin": {
+    "spartacus-mcp-server": "dist/spartacus-mcp-server.js"
+  },
   "type": "module",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "DEPLOYMENT_GUIDE.md",
+    "example-usage.md",
+    "examples/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/spartacus-mcp-server.js",
     "dev": "tsc --watch",
     "setup": "npm install && npm run build",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "echo \"Tests coming soon\" && exit 0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.5.0"
@@ -23,19 +35,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/spartacus-mcp-server.git"
+    "url": "https://github.com/aaalla-d/spartacusMCP.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/spartacus-mcp-server/issues"
+    "url": "https://github.com/aaalla-d/spartacusMCP/issues"
   },
-  "homepage": "https://github.com/your-org/spartacus-mcp-server#readme",
+  "homepage": "https://github.com/aaalla-d/spartacusMCP#readme",
   "keywords": [
     "spartacus",
     "mcp",
     "angular",
     "sap",
-    "commerce"
+    "commerce",
+    "model-context-protocol",
+    "code-generation",
+    "component-generator",
+    "typescript",
+    "cli-tool"
   ],
-  "author": "Your Name",
-  "license": "Apache-2.0"
+  "author": {
+    "name": "aaalla-d",
+    "url": "https://github.com/aaalla-d"
+  },
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  }
 } 
