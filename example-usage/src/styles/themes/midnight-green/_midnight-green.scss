@@ -1,0 +1,152 @@
+/*
+ * SPDX-FileCopyrightText: 2025 SAP Spartacus team <spartacus-team@sap.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Theme: Midnight Green Theme
+// Description: Custom Spartacus theme with midnight black background and green accent
+// Version: 1.0.0
+
+@import '~@spartacus/styles/scss/theme/santorini';
+
+// ========================================
+// MIDNIGHT GREEN THEME VARIABLES
+// ========================================
+
+// Core Brand Colors
+$cx-color-primary: #000000 !default;
+$cx-color-secondary: #1a1a1a !default;
+$cx-color-background: #0a0a0a !default;
+$cx-color-text: #ffffff !default;
+$cx-color-accent: #86BC24 !default;
+$cx-color-accent-hover: #75a520 !default;
+$cx-color-accent-light: #97cd35 !default;
+
+// Extended Color Palette
+$cx-color-inverse: #ffffff !default;
+$cx-color-success: #86BC24 !default;
+$cx-color-warning: #ffc107 !default;
+$cx-color-danger: #dc3545 !default;
+$cx-color-info: #17a2b8 !default;
+
+// Gray Scale
+$cx-color-light: #f8f9fa !default;
+$cx-color-medium: #6c757d !default;
+$cx-color-dark: #343a40 !default;
+
+// Border and Shadow Colors
+$cx-color-border: #333333 !default;
+$cx-color-border-light: #444444 !default;
+$cx-color-shadow: rgba(0, 0, 0, 0.5) !default;
+
+// Component Specific Overrides
+$cx-color-header-bg: $cx-color-secondary !default;
+$cx-color-header-text: $cx-color-text !default;
+$cx-color-footer-bg: $cx-color-primary !default;
+$cx-color-footer-text: $cx-color-text !default;
+
+// Button Colors
+$cx-color-btn-primary: $cx-color-accent !default;
+$cx-color-btn-primary-hover: $cx-color-accent-hover !default;
+$cx-color-btn-secondary: transparent !default;
+$cx-color-btn-secondary-border: $cx-color-accent !default;
+
+// Form Colors
+$cx-color-input-bg: $cx-color-secondary !default;
+$cx-color-input-border: $cx-color-border !default;
+$cx-color-input-focus: $cx-color-accent !default;
+
+// Product Colors
+$cx-color-product-bg: $cx-color-secondary !default;
+$cx-color-product-border: $cx-color-border !default;
+$cx-color-price: $cx-color-accent !default;
+$cx-color-price-sale: $cx-color-danger !default;
+
+// Responsive Breakpoints
+$cx-breakpoint-xs: 0 !default;
+$cx-breakpoint-sm: 576px !default;
+$cx-breakpoint-md: 768px !default;
+$cx-breakpoint-lg: 992px !default;
+$cx-breakpoint-xl: 1200px !default;
+$cx-breakpoint-xxl: 1400px !default;
+
+// Spacing and Layout
+$cx-spacing-xs: 0.25rem !default;
+$cx-spacing-sm: 0.5rem !default;
+$cx-spacing-md: 1rem !default;
+$cx-spacing-lg: 1.5rem !default;
+$cx-spacing-xl: 3rem !default;
+
+// Border Radius
+$cx-border-radius: 0.375rem !default;
+$cx-border-radius-sm: 0.25rem !default;
+$cx-border-radius-lg: 0.5rem !default;
+
+// Shadows
+$cx-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !default;
+$cx-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !default;
+$cx-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175) !default;
+
+// Transitions
+$cx-transition-base: all 0.2s ease-in-out !default;
+$cx-transition-fade: opacity 0.15s linear !default;
+$cx-transition-collapse: height 0.35s ease !default;
+
+// Typography
+$cx-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !default;
+$cx-font-size-base: 1rem !default;
+$cx-font-weight-light: 300 !default;
+$cx-font-weight-normal: 400 !default;
+$cx-font-weight-bold: 700 !default;
+$cx-line-height-base: 1.6 !default;
+
+// Global Theme Styles
+body {
+  background-color: $cx-color-background;
+  color: $cx-color-text;
+  font-family: $cx-font-family-base;
+  line-height: $cx-line-height-base;
+}
+
+// Selection styles
+::selection {
+  background-color: $cx-color-accent;
+  color: $cx-color-background;
+}
+
+::-moz-selection {
+  background-color: $cx-color-accent;
+  color: $cx-color-background;
+}
+
+// Accessibility Features
+@media (prefers-contrast: high) {
+  :root {
+    --cx-color-border: #ffffff;
+    --cx-color-text: #ffffff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Component imports
+@import 'components/header';
+@import 'components/footer';
+@import 'components/navigation';
+@import 'components/product-list';
+@import 'components/product-details';
+@import 'components/cart';
+@import 'components/checkout';
+@import 'components/forms';
+@import 'components/buttons';
+@import 'components/cards';
+@import 'components/hero-banner';
+@import 'components/product-grid';
+@import 'components/recommendations'; 

@@ -184,6 +184,34 @@
             box-shadow: 0 0 0 3px rgba(134, 188, 36, 0.1);
         }
 
+        .wishlist-icon {
+            position: relative;
+            color: var(--cx-color-text);
+            font-size: var(--cx-font-size-xl);
+            transition: var(--cx-transition);
+            margin-right: var(--cx-spacing-4);
+        }
+
+        .wishlist-icon:hover {
+            color: var(--cx-color-accent);
+        }
+
+        .wishlist-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--cx-color-accent);
+            color: var(--cx-color-background);
+            border-radius: var(--cx-border-radius-full);
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--cx-font-size-xs);
+            font-weight: 600;
+        }
+
         .cart-icon {
             position: relative;
             color: var(--cx-color-text);
@@ -378,8 +406,13 @@
             margin-left: var(--cx-spacing-2);
         }
 
+        .product-actions {
+            display: flex;
+            gap: var(--cx-spacing-2);
+        }
+
         .add-to-cart-btn {
-            width: 100%;
+            flex: 1;
             background: var(--cx-color-accent);
             color: var(--cx-color-background);
             border: none;
@@ -395,6 +428,36 @@
             transform: translateY(-1px);
         }
 
+        .wishlist-btn {
+            background: transparent;
+            color: var(--cx-color-gray-400);
+            border: 1px solid var(--cx-color-border);
+            padding: var(--cx-spacing-3);
+            border-radius: var(--cx-border-radius);
+            cursor: pointer;
+            transition: var(--cx-transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 48px;
+        }
+
+        .wishlist-btn:hover {
+            color: var(--cx-color-accent);
+            border-color: var(--cx-color-accent);
+            background: rgba(134, 188, 36, 0.1);
+        }
+
+        .wishlist-btn.active {
+            color: var(--cx-color-accent);
+            border-color: var(--cx-color-accent);
+            background: rgba(134, 188, 36, 0.2);
+        }
+
+        .wishlist-btn.active:hover {
+            background: rgba(134, 188, 36, 0.3);
+        }
+
         .product-badge {
             position: absolute;
             top: var(--cx-spacing-3);
@@ -405,74 +468,6 @@
             border-radius: var(--cx-border-radius-full);
             font-size: var(--cx-font-size-xs);
             font-weight: 600;
-        }
-
-        /* Recommendations Component */
-        .recommendations {
-            background: var(--cx-color-secondary);
-            border-radius: var(--cx-border-radius-lg);
-            padding: var(--cx-spacing-8);
-            border: 1px solid var(--cx-color-border);
-        }
-
-        .recommendations-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--cx-spacing-4);
-        }
-
-        .recommendation-card {
-            background: var(--cx-color-primary);
-            border: 1px solid var(--cx-color-border);
-            border-radius: var(--cx-border-radius);
-            padding: var(--cx-spacing-4);
-            transition: var(--cx-transition);
-        }
-
-        .recommendation-card:hover {
-            border-color: var(--cx-color-accent);
-            transform: translateY(-2px);
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--cx-spacing-3) var(--cx-spacing-4);
-            font-size: var(--cx-font-size-base);
-            font-weight: 500;
-            line-height: 1.5;
-            text-decoration: none;
-            border: 1px solid transparent;
-            border-radius: var(--cx-border-radius);
-            cursor: pointer;
-            transition: var(--cx-transition);
-            user-select: none;
-        }
-
-        .btn-primary {
-            background-color: var(--cx-color-accent);
-            border-color: var(--cx-color-accent);
-            color: var(--cx-color-background);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--cx-color-accent-hover);
-            border-color: var(--cx-color-accent-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--cx-box-shadow-hover);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border-color: var(--cx-color-accent);
-            color: var(--cx-color-accent);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--cx-color-accent);
-            color: var(--cx-color-background);
         }
 
         /* Footer */
@@ -622,6 +617,10 @@
                 <div class="search-box">
                     <input type="search" class="search-input" placeholder="Search products...">
                 </div>
+                <div class="wishlist-icon">
+                    <i class="fas fa-heart"></i>
+                    <span class="wishlist-badge">0</span>
+                </div>
                 <div class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-badge">3</span>
@@ -670,9 +669,14 @@
                             <span class="rating-text">(4.9) 127 reviews</span>
                         </div>
                         <div class="product-price">$1,299.99</div>
-                        <button class="add-to-cart-btn">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
+                        <div class="product-actions">
+                            <button class="add-to-cart-btn">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="wishlist-btn">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -693,9 +697,14 @@
                             <span class="rating-text">(4.2) 89 reviews</span>
                         </div>
                         <div class="product-price">$199.99</div>
-                        <button class="add-to-cart-btn">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
+                        <div class="product-actions">
+                            <button class="add-to-cart-btn">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="wishlist-btn">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -715,9 +724,14 @@
                             <span class="rating-text">(4.8) 203 reviews</span>
                         </div>
                         <div class="product-price">$899.99</div>
-                        <button class="add-to-cart-btn">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
+                        <div class="product-actions">
+                            <button class="add-to-cart-btn">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="wishlist-btn">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -738,9 +752,14 @@
                             <span class="rating-text">(4.6) 156 reviews</span>
                         </div>
                         <div class="product-price">$79.99</div>
-                        <button class="add-to-cart-btn">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
+                        <div class="product-actions">
+                            <button class="add-to-cart-btn">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="wishlist-btn">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -828,6 +847,56 @@
     <script>
         // Add interactive functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Wishlist functionality
+            const wishlistButtons = document.querySelectorAll('.wishlist-btn');
+            const wishlistBadge = document.querySelector('.wishlist-badge');
+            let wishlistCount = 0;
+            let wishlistItems = new Set();
+
+            wishlistButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('.product-name').textContent;
+                    const isActive = this.classList.contains('active');
+                    
+                    if (isActive) {
+                        // Remove from wishlist
+                        this.classList.remove('active');
+                        this.innerHTML = '<i class="fas fa-heart"></i>';
+                        wishlistItems.delete(productName);
+                        wishlistCount--;
+                        
+                        // Visual feedback
+                        this.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            this.style.transform = 'scale(1)';
+                        }, 150);
+                    } else {
+                        // Add to wishlist
+                        this.classList.add('active');
+                        this.innerHTML = '<i class="fas fa-heart"></i>';
+                        wishlistItems.add(productName);
+                        wishlistCount++;
+                        
+                        // Visual feedback
+                        this.style.transform = 'scale(1.2)';
+                        setTimeout(() => {
+                            this.style.transform = 'scale(1)';
+                        }, 150);
+                    }
+                    
+                    // Update badge
+                    wishlistBadge.textContent = wishlistCount;
+                    
+                    // Hide badge if count is 0
+                    if (wishlistCount === 0) {
+                        wishlistBadge.style.display = 'none';
+                    } else {
+                        wishlistBadge.style.display = 'flex';
+                    }
+                });
+            });
+
             // Add to cart functionality
             const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
             const cartBadge = document.querySelector('.cart-badge');
@@ -881,6 +950,9 @@
                     behavior: 'smooth'
                 });
             });
+
+            // Initialize wishlist badge as hidden
+            wishlistBadge.style.display = 'none';
         });
     </script>
 </body>

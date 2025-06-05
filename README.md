@@ -1,241 +1,433 @@
 # Spartacus MCP Server
 
-A Model Context Protocol (MCP) server that provides tools for creating custom components in SAP Spartacus following established patterns and conventions.
+A Model Context Protocol (MCP) server that provides tools for generating SAP Commerce Cloud Spartacus storefront components, themes, and complete e-commerce implementations.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-- **Node.js 18+** - [Download here](https://nodejs.org/)
-- **MCP-compatible client** such as:
-  - [Claude Desktop](https://claude.ai/desktop)
-  - [Cline VS Code Extension](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev)
+- Node.js 18+ and npm
+- An MCP-compatible client (Claude Desktop, Cline, etc.)
 
 ### Installation
 
+1. **Clone and setup:**
 ```bash
-# Clone the repository
-git clone <your-repo-url>
+git clone <repository-url>
 cd spartacus-mcp-server
+npm install
+```
 
-# Install dependencies and build
-npm run setup
-
-# Start the server
+2. **Start the server:**
+```bash
 npm start
 ```
 
-## 🔧 MCP Client Configuration
+3. **Configure your MCP client** (see IDE-specific instructions below)
+
+## 🔧 IDE Integration & Setup
+
+### Cursor IDE (Recommended)
+
+Cursor has excellent built-in MCP support. Here's how to set it up:
+
+1. **Open Cursor Settings:**
+   - Press `Cmd/Ctrl + ,` to open settings
+   - Search for "MCP" or go to Extensions → MCP
+
+2. **Add MCP Server Configuration:**
+   ```json
+   {
+     "mcp.servers": {
+       "spartacus": {
+         "command": "node",
+         "args": ["/absolute/path/to/spartacus-mcp-server/dist/index.js"],
+         "cwd": "/absolute/path/to/spartacus-mcp-server"
+       }
+     }
+   }
+   ```
+
+3. **Restart Cursor** and the MCP server will be available in your AI chat
+
+4. **Usage in Cursor:**
+   - Open any project or create a new one
+   - Start a chat with Claude
+   - Use prompts like: "Create a Spartacus product grid component"
+   - The MCP tools will be automatically available
 
 ### Claude Desktop
 
-Add to your `claude_desktop_config.json`:
+1. **Locate your config file:**
+   - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
+2. **Add the server configuration:**
+   ```json
+   {
+     "mcpServers": {
+       "spartacus": {
+         "command": "node",
+         "args": ["/absolute/path/to/spartacus-mcp-server/dist/index.js"]
+       }
+     }
+   }
+   ```
+
+3. **Restart Claude Desktop**
+
+### VS Code with Cline Extension
+
+1. **Install the Cline extension** from the VS Code marketplace
+
+2. **Configure Cline:**
+   - Open VS Code settings (`Cmd/Ctrl + ,`)
+   - Search for "Cline"
+   - Add MCP server configuration:
+
+   ```json
+   {
+     "cline.mcp.servers": [
+       {
+         "name": "spartacus",
+         "command": "node",
+         "args": ["/absolute/path/to/spartacus-mcp-server/dist/index.js"]
+       }
+     ]
+   }
+   ```
+
+3. **Usage:**
+   - Open the Cline panel in VS Code
+   - Start a conversation
+   - The Spartacus MCP tools will be available
+
+### VS Code with GitHub Copilot Chat
+
+While GitHub Copilot doesn't natively support MCP, you can use it alongside:
+
+1. **Use Cline for MCP functionality** (as above)
+2. **Use GitHub Copilot for general coding assistance**
+3. **Workflow:**
+   - Generate Spartacus components with Cline + MCP
+   - Use GitHub Copilot for code completion and refinement
+   - Combine both for maximum productivity
+
+### Continue.dev Extension
+
+1. **Install Continue.dev** in VS Code
+
+2. **Configure in `~/.continue/config.json`:**
+   ```json
+   {
+     "models": [...],
+     "mcpServers": {
+       "spartacus": {
+         "command": "node",
+         "args": ["/absolute/path/to/spartacus-mcp-server/dist/index.js"]
+       }
+     }
+   }
+   ```
+
+### JetBrains IDEs (IntelliJ, WebStorm)
+
+Currently, JetBrains IDEs don't have native MCP support, but you can:
+
+1. **Use external terminal** to run MCP commands
+2. **Use Claude Desktop** alongside your JetBrains IDE
+3. **Wait for future MCP plugin development**
+
+### Terminal/Command Line Usage
+
+For any environment, you can interact with the MCP server directly:
+
+```bash
+# Start the server
+npm start
+
+# The server runs on stdio and accepts MCP protocol messages
+# You can build custom clients or use existing MCP tools
+```
+
+## 🎯 IDE-Specific Workflows
+
+### Cursor Workflow (Recommended)
+```
+1. Open your Spartacus project in Cursor
+2. Start AI chat: "Create a modern product showcase theme"
+3. MCP tools automatically generate components
+4. Review and customize the generated code
+5. Use Cursor's built-in Git integration to commit
+```
+
+### VS Code + Cline Workflow
+```
+1. Open project in VS Code
+2. Open Cline panel
+3. Request: "Generate a shopping cart component with Spartacus MCP"
+4. Use GitHub Copilot for additional code suggestions
+5. Leverage VS Code's debugging and testing tools
+```
+
+### Claude Desktop Workflow
+```
+1. Work in any IDE/editor
+2. Use Claude Desktop for component generation
+3. Copy generated code to your project
+4. Continue development in your preferred environment
+```
+
+## 🛠️ Available Tools
+
+### Component Generation
+- **`create_spartacus_component`** - Generate complete Angular components with TypeScript, HTML, and SCSS
+- **`create_spartacus_service`** - Create Angular services with dependency injection
+- **`create_spartacus_model`** - Generate TypeScript interfaces and models
+- **`create_spartacus_theme`** - Create complete theme implementations with custom styling
+
+### Project Analysis
+- **`analyze_spartacus_project`** - Analyze existing Spartacus project structure
+- **`get_spartacus_info`** - Get information about Spartacus features and best practices
+
+## 📁 Project Structure
+
+```
+spartacus-mcp-server/
+├── README.md                    # This file
+├── package.json                 # Dependencies and scripts
+├── tsconfig.json               # TypeScript configuration
+├── spartacus-mcp-server.ts     # Main MCP server implementation
+├── index.ts                    # Server entry point
+├── tools.ts                    # Tool definitions and handlers
+├── toolHandler.ts              # Tool execution logic
+├── requestHandler.ts           # Request processing
+├── setup.sh                    # Setup script
+├── dist/                       # Compiled JavaScript
+├── examples/                   # Usage examples
+├── scripts/                    # Build and utility scripts
+├── tools/                      # Additional tooling
+├── utils/                      # Utility functions
+└── example-usage/              # Complete theme example
+    ├── README.md               # Theme documentation
+    ├── EXAMPLE_PROMPTS.md      # Usage examples
+    ├── src/                    # Generated theme source
+    └── test-theme-demo/        # Demo implementation
+```
+
+## 🎨 Example Usage
+
+### Generate a Complete Theme
+```
+Create a modern e-commerce theme called "Midnight Green" with:
+- Dark green (#1a4d3a) primary color
+- Modern card-based product grid
+- Hero banner with call-to-action
+- Responsive design for mobile and desktop
+```
+
+### Create Custom Components
+```
+Generate a product showcase component with:
+- Image carousel
+- Product details panel
+- Add to cart functionality
+- Related products section
+```
+
+### Build Complete Pages
+```
+Create a homepage with:
+- Hero banner
+- Featured products grid
+- Category navigation
+- Newsletter signup
+- Footer with links
+```
+
+## 📖 Documentation
+
+- **[Example Usage](./example-usage/README.md)** - Complete theme implementation guide
+- **[Example Prompts](./example-usage/EXAMPLE_PROMPTS.md)** - Comprehensive prompt examples
+- **[Setup Guide](./setup.sh)** - Automated setup script
+
+## 🔧 Development
+
+### Build the server:
+```bash
+npm run build
+```
+
+### Run in development mode:
+```bash
+npm run dev
+```
+
+### Test the server:
+```bash
+npm test
+```
+
+## 🛠️ Troubleshooting IDE Integration
+
+### Common Issues
+
+#### MCP Server Not Found
+```bash
+# Ensure the server is built
+npm run build
+
+# Check the file exists
+ls -la dist/index.js
+
+# Use absolute paths in configuration
+pwd  # Get current directory
+```
+
+#### Permission Issues (macOS/Linux)
+```bash
+# Make the script executable
+chmod +x dist/index.js
+
+# Check Node.js permissions
+which node
+node --version
+```
+
+#### Windows Path Issues
+```json
+// Use forward slashes or escaped backslashes
+{
+  "command": "node",
+  "args": ["C:/path/to/spartacus-mcp-server/dist/index.js"]
+}
+```
+
+#### Server Won't Start
+```bash
+# Check for port conflicts
+lsof -i :3000
+
+# Run with debug output
+DEBUG=* npm start
+
+# Check Node.js version
+node --version  # Should be 18+
+```
+
+### IDE-Specific Troubleshooting
+
+#### Cursor Issues
+- **MCP not appearing:** Restart Cursor completely
+- **Tools not working:** Check the Output panel for MCP logs
+- **Configuration not loading:** Verify JSON syntax in settings
+
+#### VS Code + Cline Issues
+- **Extension not found:** Install from marketplace: `ms-vscode.vscode-cline`
+- **MCP not connecting:** Check VS Code Developer Tools console
+- **Commands not available:** Restart VS Code and reload window
+
+#### Claude Desktop Issues
+- **Config file not found:** Create the directory structure manually
+- **Server not starting:** Check the Claude Desktop logs in the app menu
+- **JSON syntax errors:** Validate your configuration with a JSON validator
+
+### Performance Tips
+
+#### For Large Projects
 ```json
 {
-  "mcpServers": {
-    "spartacus-mcp": {
+  "mcp.servers": {
+    "spartacus": {
       "command": "node",
-      "args": ["/absolute/path/to/spartacus-mcp-server/dist/spartacus-mcp-server.js"],
-      "env": {}
+      "args": ["--max-old-space-size=4096", "/path/to/dist/index.js"]
     }
   }
 }
 ```
 
-### Cline VS Code Extension
-
-Add to your Cline settings:
-
-```json
-{
-  "cline.mcp.servers": [
-    {
-      "name": "spartacus-mcp",
-      "command": "node",
-      "args": ["/absolute/path/to/spartacus-mcp-server/dist/spartacus-mcp-server.js"]
-    }
-  ]
-}
-```
-
-## 🛠️ Available Tools
-
-### 1. Create Spartacus Component
-
-**Tool:** `create_spartacus_component`
-
-Creates a complete Spartacus component with all necessary files.
-
-```json
-{
-  "name": "ProductIntro",
-  "selector": "cx-product-intro",
-  "category": "product",
-  "outputPath": "./src/app/components",
-  "hasModule": true,
-  "hasService": false,
-  "hasModel": false,
-  "cmsComponent": "ProductIntroComponent",
-  "dependencies": ["ProductService"]
-}
-```
-
-**Generated Files:**
-- Component TypeScript, HTML, SCSS, and spec files
-- Angular module (optional)
-- Service and spec files (optional)
-- TypeScript model (optional)
-- Index file with exports
-
-### 2. Analyze Spartacus Structure
-
-**Tool:** `analyze_spartacus_structure`
-
-Analyzes your Spartacus project structure and provides insights.
-
-```json
-{
-  "projectPath": "./my-spartacus-project"
-}
-```
-
-### 3. Generate Spartacus Service
-
-**Tool:** `generate_spartacus_service`
-
-Creates a Spartacus service following established patterns.
-
-```json
-{
-  "name": "ProductDataService",
-  "outputPath": "./src/app/services",
-  "injectable": true,
-  "dependencies": ["HttpClient", "ConfigService"]
-}
-```
-
-### 4. Create Spartacus Model
-
-**Tool:** `create_spartacus_model`
-
-Creates TypeScript interfaces and models.
-
-```json
-{
-  "name": "ProductData",
-  "outputPath": "./src/app/models",
-  "properties": {
-    "id": "string",
-    "name": "string",
-    "price": "number"
-  },
-  "extends": "BaseProduct"
-}
-```
-
-## 📚 Documentation
-
-- **[Deployment Guide](DEPLOYMENT_GUIDE.md)** - Complete setup and configuration instructions
-- **[Example Usage](example-usage.md)** - Real-world scenarios and code examples
-- **[Examples Directory](examples/)** - Comprehensive tool examples and patterns
-
-## 🏗️ Generated Code Features
-
-- ✅ Follows Spartacus conventions and best practices
-- ✅ TypeScript strict mode compliance
-- ✅ OnPush change detection strategy
-- ✅ Internationalization (i18n) ready
-- ✅ SCSS with Spartacus design tokens
-- ✅ Comprehensive unit tests
-- ✅ CMS component configuration
-- ✅ Proper dependency injection
-
-## 🔍 Project Structure
-
-```
-spartacus-mcp-server/
-├── spartacus-mcp-server.ts     # Main MCP server
-├── package.json                # Dependencies and scripts
-├── tsconfig.json              # TypeScript configuration
-├── DEPLOYMENT_GUIDE.md        # Detailed setup guide
-├── example-usage.md           # Usage examples
-├── examples/                  # Tool examples
-│   ├── component-generation/  # Component tools
-│   ├── service-management/    # Service tools
-│   ├── project-analysis/      # Analysis tools
-│   └── ...                   # Other categories
-└── dist/                     # Compiled JavaScript
-```
-
-## 🚀 Development
-
-### Building
-
+#### For Development
 ```bash
-npm run build
+# Use development mode for faster iteration
+npm run dev
+
+# Watch for changes
+npm run watch
 ```
 
-### Development Mode
+## 💡 Pro Tips for IDE Usage
 
-```bash
-npm run dev  # Watch mode
-```
+### Cursor Pro Tips
+- **Use project context:** Open your Spartacus project first for better suggestions
+- **Combine with Composer:** Use Cursor's Composer feature with MCP tools
+- **Keyboard shortcuts:** Set up custom shortcuts for common MCP commands
+- **Multi-file editing:** Generate multiple components at once
 
-### Testing the Server
+### VS Code Pro Tips
+- **Split terminals:** Run MCP server in one terminal, development server in another
+- **Workspace settings:** Save MCP configuration per workspace
+- **Extension combinations:** Use with Angular Language Service for better IntelliSense
+- **Debugging:** Use VS Code's debugger with generated components
 
-```bash
-# Start the server
-npm start
+### General Workflow Tips
+1. **Start with themes:** Generate a complete theme first, then customize
+2. **Use example prompts:** Copy from `example-usage/EXAMPLE_PROMPTS.md`
+3. **Iterate quickly:** Generate, test, refine with MCP tools
+4. **Version control:** Commit generated code to track changes
+5. **Documentation:** Use MCP to generate component documentation
 
-# The server will log: "Spartacus MCP server running on stdio"
-```
+## 🔗 IDE Extensions & Plugins
+
+### Recommended Extensions for Spartacus Development
+
+#### VS Code
+- **Angular Language Service** - Enhanced Angular support
+- **Cline** - MCP integration
+- **GitLens** - Git integration
+- **Prettier** - Code formatting
+- **ESLint** - Code linting
+- **SCSS IntelliSense** - SCSS support
+
+#### Cursor
+- **Built-in Claude integration** - No additional setup needed
+- **Git integration** - Built-in version control
+- **TypeScript support** - Native TypeScript features
+
+### Future IDE Support
+
+We're working on plugins for:
+- **JetBrains IDEs** (WebStorm, IntelliJ)
+- **Vim/Neovim** with MCP support
+- **Emacs** with language server integration
+- **Sublime Text** with custom plugins
+
+## 🌟 Features
+
+- **Complete Theme Generation** - Full Spartacus themes with custom styling
+- **Component Library** - Reusable Angular components
+- **Responsive Design** - Mobile-first, responsive layouts
+- **TypeScript Support** - Full type safety and IntelliSense
+- **SCSS Styling** - Modern CSS with variables and mixins
+- **Accessibility** - WCAG compliant components
+- **Performance Optimized** - Lazy loading and efficient rendering
+- **Production Ready** - Enterprise-grade code quality
 
 ## 🎯 Use Cases
 
-### Component Development
-- Scaffold new Spartacus components
-- Generate services and models
-- Create CMS component configurations
-- Set up proper testing structure
-
-### Project Analysis
-- Analyze existing Spartacus projects
-- Get version compatibility information
-- Receive recommendations for improvements
-
-### Code Generation
-- Generate TypeScript interfaces
-- Create Angular services
-- Build component modules
-- Set up proper file structure
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-1. **Server won't start**: Check Node.js version (18+)
-2. **Build errors**: Run `npm run clean && npm run build`
-3. **MCP client can't connect**: Verify absolute path in configuration
-
-### Debug Mode
-
-```bash
-DEBUG=* npm start
-```
+- **Rapid Prototyping** - Quickly generate Spartacus storefronts
+- **Theme Development** - Create custom themes and branding
+- **Component Library** - Build reusable component collections
+- **Learning Tool** - Understand Spartacus architecture and patterns
+- **Client Demos** - Generate impressive e-commerce demos
+- **Development Acceleration** - Speed up Spartacus development
 
 ## 📄 License
 
-Apache 2.0 License - see LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+Contributions are welcome! Please feel free to submit a Pull Request.
 
----
+## 📞 Support
 
-**Happy Spartacus Development! 🛍️** 
+For questions and support, please open an issue in the repository. 
