@@ -1,0 +1,32 @@
+{
+  "name": "spartacus-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for creating custom components in SAP Spartacus",
+  "main": "spartacus-mcp-server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node spartacus-mcp-server.js",
+    "dev": "tsx spartacus-mcp-server.ts"
+  },
+  "keywords": [
+    "mcp",
+    "spartacus",
+    "sap",
+    "angular",
+    "component-generator"
+  ],
+  "author": "Your Name",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
